@@ -2,5 +2,5 @@
 
 	echo "Hola mundo";
 	echo "\"Haz algún cambio a ver si lo veo...\"";
-	echo ":3";
+	echo ":3:3";
 ?>
