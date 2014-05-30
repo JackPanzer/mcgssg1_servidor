@@ -1,11 +1,14 @@
+<!DOCTYPE html>
+<meta>
+</meta>
+<html>
+<body>
 <?php
 
-	echo "Hola mundo";
-
-	echo "Lorem Ipsum";
-
-
-	echo "\"Haz algún cambio a ver si lo veo...\"";
-	echo ":3:3";
+	echo "IMA DELETIN YER INDEX<br>";
+	echo "Human, pls stahp<br>";
+	echo ":<";
 
 ?>
+</body>
+</html>
