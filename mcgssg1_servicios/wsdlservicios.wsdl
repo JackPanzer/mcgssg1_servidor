@@ -1,0 +1,414 @@
+<?xml version="1.0"?>
+<definitions name="ErasmusServicio"
+    targetNamespace="urn:Erasmus"
+     xmlns:tns="urn:Erasmus"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+     xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns="http://schemas.xmlsoap.org/wsdl/">
+ 
+  <!-- Tipos complejos de datos -->
+
+  <types>
+	<xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="urn:Erasmus">
+		<!-- Tipo imagen para la firma -->
+		<xsd:element name='imagen'>
+			<xsd:simpleType>
+				<xsd:attribute name='fuenteImagen' type='xsd:anyURI'/>
+			</xsd:simpleType>
+		</xsd:element> 
+		<!-- Tipo de dato del destino -->
+		<xsd:element name="ComplexDestino">
+			<xsd:complexType>
+				<xsd:sequence>
+					<xsd:element name="facultad" type="xsd:string" />
+					<xsd:element name="titul" type="xsd:string" />
+					<xsd:element name="coordinador" type="xsd:string" />
+					<xsd:element name="telefonoDestino" type="xsd:string" />
+					<xsd:element name="fax" type="xsd:string" />
+					<xsd:element name="emailCoordinador" type="xsd:string" />
+					<xsd:element name="curso" type="xsd:int" />
+				</xsd:sequence>
+			</xsd:complexType>
+		</xds:element>
+		<!-- Tipo de dato CPRA -->
+		<xsd:element name="ComplexCPRA">
+			<xsd:complexType>
+				<xsd:sequence>
+					<xsd:element name="facultad" type="xsd:string" />
+					<xsd:element name="titul" type="xsd:string" />
+					<xsd:element name="coordinador" type="xsd:string" />
+					<xsd:element name="telefonoUHU" type="xsd:string" />
+					<xsd:element name="fax" type="xsd:string" />
+					<xsd:element name="emailCoordinador" type="xsd:string" />
+					<xsd:element name="apellidos" type="xsd:string" />
+					<xsd:element name="nombre" type="xsd:string" />
+					<xsd:element name="emailAlumno" type="xsd:string" />
+					<xsd:element name="telefonoAlumno" type="xsd:string" />
+					<xsd:element name="destino" type="tns:ComplexDestino" />
+					<xsd:element name="asigDestino" type="tns:ArrayAsig" />
+					<xsd:element name="asigUHU" type="tns:ArrayAsig" />
+					<xsd:element name="firmaAlumno" type="tns:imagen" />
+					<xsd:element name="firmaCoordinador" type="tns:imagen" />
+				</xsd:sequence>
+			</xsd:complexType>
+		</xds:element>
+		<!-- Tipo de dato de la asignatura -->
+		<xsd:element name="ComplexAsignatura">
+			<xsd:complexType>
+				<xsd:sequence>
+					<xsd:element name="codigo" type="xsd:string" />
+					<xsd:element name="denominacion" type="xsd:string" />
+					<xsd:element name="creditos" type="xsd:int" />
+					<xsd:element name="totalCreditos" type="xsd:int" />
+				</xsd:sequence>
+			</xsd:complexType>
+		</xds:element>
+		<!-- Tipo de dato del precontrato -->
+		<xsd:element name="ComplexPrecontrato">
+			<xsd:complexType>
+				<xsd:sequence>
+					<xsd:element name="destino" type="tns:ComplexDestino" />
+					<xsd:element name="cpra" type="tns:ComplexCPRA" />
+				</xsd:sequence>
+			</xsd:complexType>
+		</xds:element>
+		<!-- Array de asignaturas -->
+		<xsd:element name="ArrayAsig">
+			<xsd:complexType>
+				<xsd:sequence>
+					<xsd:element name="asignaturas" type="tns:ComplexAsignatura" minOccurs="1" maxOccurs="unbounded" nillable="false"/>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xds:element>
+		<!-- Array de precontratos pendientes de confirmar -->
+		<xsd:element name="ArrayPrecontrato">
+			<xsd:complexType>
+				<xsd:sequence>
+					<xsd:element name="precontrato" type="tns:ComplexPrecontrato" minOccurs="0" maxOccurs="unbounded" nillable="true" />
+				</xsd:sequence>
+			</xsd:complexType>
+		</xds:element>
+	</xsd:schema>
+  </types>
+
+  <!-- Mensajes de alumno -->
+  
+  <message name="ConsultarDestinoInput">
+    <part name="titulacion" type="xsd:string" />
+  </message>
+
+  <message name="ConsultarDestinoOutput">
+    <part name="resDest" type="tns:ComplexDestino"/>
+  </message>
+
+  <message name="solicitarDestinoInput">
+    <part name="id" type="xsd:string" />
+  </message>
+
+  <message name="solicitarDestinoOutput">
+    <part name="respuesta" type="xsd:int" />
+  </message>
+
+  <message name="consultarCPRAInput">
+    <part name="id" type="xsd:string" />
+  </message>
+
+  <message name="consultarCPRAOutput">
+    <part name="resCpra" type="tns:ComplexCPRA" />
+  </message>
+
+  <message name="enviarCPRAInput">
+    <part name="id" type="xsd:string" />
+  </message>
+
+  <message name="enviarCPRAOutput">
+    <part name="respuesta" type="xsd:int" />
+  </message>
+
+  <message name="crearCPRAInput">
+    <part name="idAlumno" type="xsd:string" />
+    <part name="asignaturasOrigen" type="tns:ArrayAsig" />
+    <part name="asignaturasDestino" type="tns:ArrayAsig" />
+  </message>
+
+  <message name="crearCPRAOutput">
+    <part name="respuesta" type="xsd:int" />
+  </message>
+
+  <message name="modificarCPRAInput">
+    <part name="idCPRA" type="xsd:string" />
+  </message>
+
+  <message name="modificarCPRAOutput">
+    <part name="RespuestaCPRA" type="tns:ComplexCPRA" />
+  </message>
+
+  <message name="eliminarCPRAInput">
+    <part name="idCPRA" type="xsd:string" />
+  </message>
+
+  <message name="eliminarCPRAOutput">
+    <part name="respuesta" type="xsd:int" />
+  </message>
+
+  <!-- Mensajes de coordinadores -->
+
+  <message name="consultarPrecontratosInput">
+    <part name="titulacion" type="xsd:string" />
+  </message>
+
+  <message name="consultarPrecontratosOutput">
+    <part name="respuestaPrecon" type="tns:ArrayPrecontrato" />
+  </message>
+
+  <message name="aceptarPrecontratoValidadoInput">
+    <part name="idPrecontrato" type="xsd:string" />
+  </message>
+
+  <message name="aceptarPrecontratoValidadoOutput">
+    <part name="respuesta" type="xsd:int" />
+  </message>
+
+  <message name="validarPrecontratoInput">
+    <part name="idPrecontrato" type="xsd:string" />
+  </message>
+
+  <message name="validarPrecontratoOutput">
+    <part name="respuesta" type="xsd:int" />
+  </message>
+
+  <message name="crearDestinoInput">
+    <part name="idDestino" type="xsd:string" />
+  </message>
+
+  <message name="crearDestinoOutput">
+    <part name="respuesta" type="xsd:int" />
+  </message>
+
+  <message name="consultarDestinoCoordInput">
+    <part name="idDestino" type="xsd:string" />
+  </message>
+
+  <message name="consultarDestinoCoordOutput">
+    <part name="destino" type="ComplexDestino" />
+  </message>
+
+  <!-- Operaciones -->
+
+  <portType name="ErasmusPort">
+    <!-- Operaciones del alumno -->
+    <operation name="consultarDestino">
+      <input message="tns:ConsultarDestinoInput" />
+      <output message="tns:ConsultarDestinoOutput" />
+    </operation>
+
+    <operation name="solicitarDestino">
+      <input message="tns:SolicitarDestinoInput" />
+      <output message="tns:SolicitarDestinoOutput" />
+    </operation>
+
+    <operation name="consultarCPRA">
+      <input message="tns:ConsultarCPRAInput" />
+      <output message="tns:ConsultarCPRAOutput" />
+    </operation>
+
+    <operation name="enviarCPRA">
+      <input message="tns:enviarCPRAInput" />
+      <output message="tns:enviarCPRAOutput" />
+    </operation>
+
+    <operation name="crearCPRA">
+      <input name="tns:crearCPRAInput" />
+      <output name="tns:crearCPRAOutput" />
+    </operation>
+
+    <operation name="modificarCPRA">
+      <input name="tns:modificarCPRAInput" />
+      <output name="tns:modificarCPRAOutput" />
+    </operation>
+
+    <operation name="eliminarCPRA">
+      <input name="tns:eliminarCPRAInput" />
+      <output name="tns:eliminarCPRAOutput" />
+    </operation>
+
+    <!-- Coordinadores -->
+    <operation name="consultarPrecontratos">
+      <input name="tns:consultarPrecontratosInput" />
+      <output name="tns:consultarPrecontratosOutput" />
+    </operation>
+
+    <operation name="aceptarPrecontratoValidado">
+      <input name="tns:aceptarPrecontratoValidadoInput" />
+      <output name="tns:aceptarPrecontratoValidadoOutput" />
+    </operation>
+
+    <operation name="validarPrecontrato">
+      <input name="tns:validarPrecontratoInput" />
+      <output name="tns:validarPrecontratoOutput" />
+    </operation>
+
+    <operation name="crearDestino">
+      <input name="tns:crearDestinoInput" />
+      <output name="tns:crearDestinoOutput" />
+    </operation>
+
+    <operation name="consultarDestinoCoord">
+      <input name="tns:consultarDestinoCoordInput" />
+      <output name="tns:consultarDestinoCoordOutput" />
+    </operation>
+
+
+  </portType>
+  <!-- Binding -->
+ 
+  <binding name="ErasmusBinding" type="tns:ErasmusPort">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+    
+    <!-- Operaciones de Alumnos -->
+    <!-- Consultar destinos disponibles en base a la titulación -->
+    <operation name="consultarDestino">
+      <soap:operation soapAction="urn:Erasmus#consultarDestino" />
+      <input>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </output>
+    </operation>
+
+    <!-- Selecciona uno de los tres destinos como máximo para viajar de Erasmus -->
+    <operation name="solicitarDestino">
+      <soap:operation soapAction="urn:Erasmus#solicitarDestino" />
+      <input>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </output>
+    </operation>
+
+    <!-- Consultar el CPRA -->
+    <operation name="consultarCPRA">
+      <soap:operation soapAction="urn:Erasmus#consultarCPRA" />
+      <input>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </output>
+    </operation>
+
+    <!-- Modificar el CPRA -->
+    <operation name="modificarCPRA">
+      <soap:operation soapAction="urn:Erasmus#modificarCPRA" />
+      <input>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </output>
+    </operation>
+
+    <!-- Enviar el CPRA -->
+    <operation name="enviarCPRA">
+      <soap:operation soapAction="urn:Erasmus#enviarCPRA" />
+      <input>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </output>
+    </operation>
+
+    <!-- Eliminar el CPRA -->
+    <operation name="eliminarCPRA">
+      <soap:operation soapAction="urn:Erasmus#eliminarCPRA" />
+      <input>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </output>
+    </operation>
+
+    <!-- Crear el CPRA -->
+    <operation name="crearCPRA">
+      <soap:operation soapAction="urn:Erasmus#crearCPRA" />
+      <input>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </output>
+    </operation>
+
+    <!-- Operaciones de Coordinadores -->
+
+    <!-- Consultar lista de precontratos validados -->
+    <operation name="consultarPrecontratos">
+      <soap:operation soapAction="urn:Erasmus#consultarPrecontratos" />
+      <input>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </output>
+    </operation>
+
+    <!-- Aceptar un precontrato validado -->
+    <operation name="aceptarPrecontratos">
+      <soap:operation soapAction="urn:Erasmus#aceptarPrecontratos" />
+      <input>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </output>
+    </operation>
+
+    <!-- Validar un precontrato -->
+    <operation name="validarPrecontratos">
+      <soap:operation soapAction="urn:Erasmus#validarPrecontratos" />
+      <input>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </output>
+    </operation>
+
+    <!-- Crear un destino nuevo -->
+    <operation name="crearDestino">
+      <soap:operation soapAction="urn:Erasmus#crearDestino" />
+      <input>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </output>
+    </operation>
+
+    <!-- Consultar destino por ID -->
+    <operation name="consultarDestinoCoord">
+      <soap:operation soapAction="urn:Erasmus#consultarDestinoCoord" />
+      <input>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </input>
+      <output>
+        <soap:body use="encoded" namespace="urn:Erasmus" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </output>
+    </operation>
+
+  </binding>
+
+  <!-- Setup del servicio -->
+
+  <service name="ErasmusServicio">
+    <port name="ErasmusPort" binding="tns:ErasmusBinding">
+      <soap:address location="http://www.uhu.es/servicio_erasmus.php" />
+    </port>
+  </service>
+</definitions>
