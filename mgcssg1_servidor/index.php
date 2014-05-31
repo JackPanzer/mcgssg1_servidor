@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<meta>
-</meta>
+
 <html>
 <body>
 <?php
