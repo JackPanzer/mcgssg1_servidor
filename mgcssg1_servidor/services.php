@@ -14,7 +14,6 @@ $server = new SoapServer("nuestroWSDL.wsdl");
  */
 function consultarDestinos($idAlumno){
 	//TODO
-	
 }
 
 /**
@@ -24,6 +23,31 @@ function consultarDestinos($idAlumno){
  */
 function crearSolicitud($idAlumno, $idDestino){
 	//TODO
+	$retorno;
+	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
+	if($conexion){
+		$bdactual = mysql_select_db(DB_NAME, $conexion);
+		$fechaactual = date("d/m/Y");
+		
+		$query = "INSERT INTO Solicitud VALUES(".$idAlumno.", 
+				".$idDestino.", 
+				'".$fechaactual."', false);";
+		
+		$resultadoquery = mysql_query(mysql_escape_string($query), $conexion);
+		if($resultadoquery){
+			$retorno = 0;
+		}
+		else{
+			$retorno = -2;
+		}
+		
+		mysql_close($conexion);
+	}
+	else{
+		$retorno = -1;
+	}
+	
+	return $retorno;
 }
 
 /**
