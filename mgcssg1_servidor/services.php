@@ -2,6 +2,11 @@
 
 include 'capaDatos.php';
 
+define('DB_SERVER','<direccion servidor>');
+define('DB_NAME','<nombre base de datos>');
+define('DB_USER','');
+define('DB_PASS','');
+
 ini_set("soap.wsdl_cache_enabled","0");
 
 $server = new SoapServer("nuestroWSDL.wsdl");
@@ -22,7 +27,7 @@ function consultarDestinos($idAlumno){
  * @param $idDestino
  */
 function crearSolicitud($idAlumno, $idDestino){
-	//TODO
+	
 	$retorno;
 	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
 	if($conexion){
@@ -30,20 +35,20 @@ function crearSolicitud($idAlumno, $idDestino){
 		$fechaactual = date("d/m/Y");
 		
 		$query = "INSERT INTO Solicitud VALUES(".$idAlumno.", 
-				".$idDestino.", 
-				'".$fechaactual."', false);";
+												".$idDestino.", 
+												'".$fechaactual."', false);";
 		
 		$resultadoquery = mysql_query(mysql_escape_string($query), $conexion);
 		if($resultadoquery){
 			$retorno = 0;
 		}
-		else{
+		else{ /*Sentencia SQL incorrecta*/
 			$retorno = -2;
 		}
 		
 		mysql_close($conexion);
 	}
-	else{
+	else{ /*Fallo en la conexion*/
 		$retorno = -1;
 	}
 	
