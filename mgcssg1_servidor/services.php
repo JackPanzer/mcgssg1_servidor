@@ -65,7 +65,33 @@ function crearSolicitud($idAlumno, $idDestino){
  * @param $nvlRequerido nivel del idioma requerido
  */
 function crearDestino($nombre, $idPais, $idIdioma, $disponible, $numPlazas, $nvlRequerido){
-	//TODO	
+	$retorno;
+	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
+	if($conexion){
+		$bdactual = mysql_select_db(DB_NAME, $conexion);
+		
+		$query = "INSERT INTO Destino VALUES('".$nombre."', 
+												".$idPais.",
+												".$idIdioma.",
+												".$disponible.",
+												".$numPlazas.", 
+												".$nvlRequerido.", false);";
+		
+		$resultadoquery = mysql_query(mysql_escape_string($query), $conexion);
+		if($resultadoquery){
+			$retorno = 0;
+		}
+		else{ /*Sentencia SQL incorrecta*/
+			$retorno = -2;
+		}
+		
+		mysql_close($conexion);
+	}
+	else{ /*Fallo en la conexion*/
+		$retorno = -1;
+	}
+	
+	return $retorno;	
 }
 
 /**
