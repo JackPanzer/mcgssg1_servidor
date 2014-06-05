@@ -19,6 +19,32 @@ $server = new SoapServer("nuestroWSDL.wsdl");
  */
 function consultarDestinos($idAlumno){
 	//TODO
+	$retorno;
+	
+	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
+	if($conexion){
+		$esquema = mysql_select_db(DB_NAME, $conexion);
+		if($esquema){
+			$query = "";
+			$resultadoQuery = mysql_query(mysql_escape_string($query), $conexion);
+			if($resultadoQuery){
+				$retorno = 0;
+			}
+			else{
+				$retorno = -3;
+			}
+		}
+		else{
+			$retorno = -2;
+		}
+	
+		mysql_close($conexion);
+	}
+	else{
+		$retorno = -1;
+	}
+	
+	return $retorno;
 }
 
 /**
@@ -106,6 +132,38 @@ function crearDestino($nombre, $idPais, $idIdioma, $disponible, $numPlazas, $nvl
  */
 function editarDestino($idDestino, $nombre, $idPais, $idIdioma, $disponible, $numPlazas, $nvlRequerido){
 	//TODO
+	$retorno;
+	
+	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
+	if($conexion){
+		$esquema = mysql_select_db(DB_NAME, $conexion);
+		if($esquema){
+			$query = "UPDATE FROM Destino SET nombre='".$nombre."' 
+					idPais=".$idPais." 
+					idIdioma=".$idIdioma." 
+					disponible=".$disponible." 
+					numPlazas=".$numPlazas." 
+					nvlRequerido=".$nvlRequerido." 
+					WHERE idDetino=".$idDestino.";";
+			$resultadoQuery = mysql_query(mysql_escape_string($query), $conexion);
+			if($resultadoQuery){
+				$retorno = 0;
+			}
+			else{
+				$retorno = -3;
+			}
+		}
+		else{
+			$retorno = -2;
+		}
+		
+		mysql_close($conexion);
+	}
+	else{
+		$retorno = -1;
+	}
+	
+	return $retorno;
 }
 
 /**
@@ -114,6 +172,32 @@ function editarDestino($idDestino, $nombre, $idPais, $idIdioma, $disponible, $nu
  */
 function borrarDestino($idDestino){
 	//TODO
+	$retorno;
+	
+	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
+	if($conexion){
+		$esquema = mysql_select_db(DB_NAME, $conexion);
+		if($esquema){
+			$query = "DELETE FROM Destino WHERE idDestino = ".$idDestino.";";
+			$resultadoQuery = mysql_query(mysql_escape_string($query), $conexion);
+			if($resultadoQuery){
+				$retorno = 0;
+			}
+			else{
+				$retorno = -3;
+			}
+		}
+		else{
+			$retorno = -2;
+		}
+	
+		mysql_close($conexion);
+	}
+	else{
+		$retorno = -1;
+	}
+	
+	return $retorno;
 }
 
 $server->addFunction("consultarDestinos");
