@@ -19,16 +19,32 @@ $server = new SoapServer("nuestroWSDL.wsdl");
  */
 function consultarDestinos($idAlumno){
 	//TODO
-	$retorno;
+	$retorno = new ArrayDestinos();
 	
 	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
 	if($conexion){
 		$esquema = mysql_select_db(DB_NAME, $conexion);
 		if($esquema){
-			$query = "";
+			$query = "SELECT d.nombre AS nombre, p.nombre AS pais, i.nombre AS idioma, d.disponible,".
+					 " d.numplazas AS numplazas, n.nombre AS nvlrequerido".
+					 " FROM ((((Usuario al INNER JOIN Solicitud s ON al.id = s.idAl)".
+					 " INNER JOIN Destino d ON d.id = s.idDest) INNER JOIN Nivel n ON n.id = d.nvlrequerido)".
+					 " INNER JOIN Pais p ON p.id=d.pais) INNER JOIN Idioma i ON i.id = d.idioma".
+					 " WHERE al.id = ".$idAlumno.";";
 			$resultadoQuery = mysql_query(mysql_escape_string($query), $conexion);
 			if($resultadoQuery){
-				$retorno = 0;
+				while($fila = mysql_fetch_row($resultadoQuery)){
+					$destinoActual = new ComplexDestino();
+					
+					$destinoActual->nombre = $fila['nombre'];
+					$destinoActual->pais = $fila['pais'];
+					$destinoActual->idioma = $fila['idioma'];
+					$destinoActual->disponible = $fila['disponible'];
+					$destinoActual->numplazas = $fila['numplazas'];
+					$destinoActual->nvlrequerido = $fila['nvlrequerido'];
+					
+					array_push($retorno->destinos, $destinoActual);
+				}
 			}
 			else{
 				$retorno = -3;
@@ -96,7 +112,8 @@ function crearDestino($nombre, $idPais, $idIdioma, $disponible, $numPlazas, $nvl
 	if($conexion){
 		$bdactual = mysql_select_db(DB_NAME, $conexion);
 		
-		$query = "INSERT INTO Destino VALUES('".$nombre."', 
+		$query = "INSERT INTO Destino('nombre', 'pais', 'idioma', 'disponible', 'numplazas', 'nvlrequerido')".
+												" VALUES('".$nombre."', 
 												".$idPais.",
 												".$idIdioma.",
 												".$disponible.",
@@ -139,12 +156,12 @@ function editarDestino($idDestino, $nombre, $idPais, $idIdioma, $disponible, $nu
 		$esquema = mysql_select_db(DB_NAME, $conexion);
 		if($esquema){
 			$query = "UPDATE FROM Destino SET nombre='".$nombre."' 
-					idPais=".$idPais." 
-					idIdioma=".$idIdioma." 
+					pais=".$idPais." 
+					idioma=".$idIdioma." 
 					disponible=".$disponible." 
 					numPlazas=".$numPlazas." 
 					nvlRequerido=".$nvlRequerido." 
-					WHERE idDetino=".$idDestino.";";
+					WHERE id=".$idDestino.";";
 			$resultadoQuery = mysql_query(mysql_escape_string($query), $conexion);
 			if($resultadoQuery){
 				$retorno = 0;

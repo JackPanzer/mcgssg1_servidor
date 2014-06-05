@@ -2,57 +2,21 @@
 
 class ComplexDestino{
 	
-	public $facultad;
-	public $titul;
-	public $coordinador;
-	public $telefonoDestino;
-	public $fax;
-	public $emailCoordinador;
-	public $curso;
-	
-};
-
-class ComplexCPRA{
-	
-	public $facultad;
-	public $titul;
-	public $coordinador;
-	public $telefonoUHU;
-	public $fax;
-	public $emailCorrdinador;
-	public $apellidos;
 	public $nombre;
-	public $emailAlumno;
-	public $telefonoAlumno;
-	public $destino;
-	public $asigDestino;
-	public $asigUHU;
-	public $firmaAlumno;
-	public $firmaCoordinador;
+	public $pais;
+	public $idioma;
+	public $disponible;
+	public $numplazas;
+	public $nvlrequerido;
 	
 };
 
-class ComplexAsignatura{
+class ArrayDestinos{
+	public $destinos;
 	
-	public $codigo;
-	public $denominacion;
-	public $creditos;
-	public $totalCreditos;
-	
-};
-
-class ComplexContrato{
-	
-	public $destino;
-	public $cpra;
-};
-
-class ArrayAsig{
-	public $asignaturas;
-};
-
-class ArrayPrecontrato{
-	public $precontrato;
+	public function ArrayDestinos(){
+		$destinos = array();
+	}
 };
 
 ?>
