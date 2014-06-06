@@ -1,0 +1,163 @@
+<?xml version="1.0"?>
+<definitions name="ErasmusWSDL"
+    targetNamespace="urn:ErasmusWSDL"
+     xmlns:tns="urn:ErasmusWSDL"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+     xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns="http://schemas.xmlsoap.org/wsdl/">
+     
+  <wsdl:types>
+  	<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    		    targetNamespace="urn:ErasmusWSDL">
+    	<xsd:complexType name="GenericResult">
+    		<xsd:sequence>
+    			<xsd:element name="errno" type="xsd:int" />
+    		</xsd:sequence>
+    	</xsd:complexType>
+    	
+    	<xsd:complexType name="ComplexDestino">
+    		<xsd:sequence>
+    			<xsd:element name="errno" type="xsd:int"/>
+    			<xsd:element name="nombre" type="xsd:string"/>
+    			<xsd:element name="pais" type="xsd:string"/>
+    			<xsd:element name="idioma" type="xsd:string"/>
+    			<xsd:element name="disponible" type="xsd:boolean"/>
+    			<xsd:element name="numplazas" type="xsd:int"/>
+    			<xsd:element name="nvlrequerido" type="xsd:string"/>
+    		</xsd:sequence>
+    	</xsd:complexType>
+    	
+    	<xsd:complexType name="ArrayDestinos">
+    		<xsd:sequence>
+    			<xsd:element name="errno" type="xsd:int"/>
+    			<xsd:element name="destinos" type="tns:ComplexDestino" maxOccurs="unbounded"/>
+    		</xsd:sequence>
+    	</xsd:complexType>
+  	</xsd:schema>
+  </wsdl:types>
+   	
+  <message name="ConsultarDestinosEntrada">
+  </message>
+  
+  <message name="ConsultarDestinosSalida">
+  </message>
+  
+  <message name="CrearSolicitudEntrada">
+  </message>
+  
+  <message name="CrearSolicitudSalida">
+  </message>
+  
+  <message name="CrearDestinoEntrada">
+  </message>
+  
+  <message name="CrearDestinoSalida">
+  </message>
+  
+  <message name="EditarDestinoEntrada">
+  </message>
+  
+  <message name="EditarDestinoSalida">
+  </message>
+  
+  <message name="BorrarDestinoEntrada">
+  </message>
+  
+  <message name="BorrarDestinoSalida">
+  </message>
+  
+  <portType name="ErasmusWSDLPort">
+  	<operation name="consultarDestinos">
+  		<input message="tns:ConsultarDestinosEntrada" />
+  		<output message="tns:ConsultarDestinosSalida" />
+  	</operation>
+  	
+  	<operation name="crearSolicitud">
+  		<input message="tns:CrearSolicitudEntrada" />
+  		<output message="tns:CrearSolicitudSalida" />
+  	</operation>
+  	
+  	<operation name="crearDestino">
+  		<input message="tns:CrearDestinoEntrada" />
+  		<output message="tns:CrearDestinoSalida" />
+  	</operation>
+  	
+  	<operation name="editarDestino">
+  		<input message="tns:EditarDestinoEntrada" />
+  		<output message="tns:EditarDestinoSalida" />
+  	</operation>
+  	
+  	<operation name="borrarDestino">
+  		<input message="tns:BorrarDestinoEntrada" />
+  		<output message="tns:BorrarDestinoEntrada" />
+  	</operation>
+  </portType>
+ 
+  <binding name="ErasmusWSDLBinding" type="tns:ErasmusWSDLPort">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="consultarDestinos">
+        <soap:operation soapAction="urn:ErasmusWSDL#consultarDestinos" />
+        <input>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    <operation name="crearSolicitud">
+        <soap:operation soapAction="urn:ErasmusWSDL#crearSolicitud" />
+        <input>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    <operation name="crearDestino">
+        <soap:operation soapAction="urn:ErasmusWSDL#crearDestino" />
+        <input>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    <operation name="editarDestino">
+        <soap:operation soapAction="urn:ErasmusWSDL#editarDestino" />
+        <input>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    <operation name="borrarDestino">
+        <soap:operation soapAction="urn:ErasmusWSDL#borrarDestino" />
+        <input>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    
+  </binding>
+   
+  <service name="EjemploClaseServicio">
+    <port name="ErasmusWSDLPort" binding="tns:ErasmusWSDLBinding">
+      <soap:address location="http://localhost/services.php" />
+    </port>
+  </service>
+</definitions>

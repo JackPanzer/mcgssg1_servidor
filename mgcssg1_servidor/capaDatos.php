@@ -1,7 +1,12 @@
 <?php
 
+class GenericResult{
+	public $errno;
+};
+
 class ComplexDestino{
 	
+	public $errno;
 	public $nombre;
 	public $pais;
 	public $idioma;
@@ -12,6 +17,7 @@ class ComplexDestino{
 };
 
 class ArrayDestinos{
+	public $errno;
 	public $destinos;
 	
 	public function ArrayDestinos(){

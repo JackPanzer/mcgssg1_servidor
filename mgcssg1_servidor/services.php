@@ -9,7 +9,7 @@ define('DB_PASS','');
 
 ini_set("soap.wsdl_cache_enabled","0");
 
-$server = new SoapServer("nuestroWSDL.wsdl");
+$server = new SoapServer("services.wsdl");
 
 /**
  * Obtenemos todos los destinos para un Usuario alumno indicado
