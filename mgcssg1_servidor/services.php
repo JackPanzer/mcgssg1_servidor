@@ -188,7 +188,6 @@ function editarDestino($idDestino, $nombre, $idPais, $idIdioma, $disponible, $nu
  * @param $idDestino id del destino a eliminar
  */
 function borrarDestino($idDestino){
-	//TODO
 	$retorno;
 	
 	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
@@ -217,11 +216,22 @@ function borrarDestino($idDestino){
 	return $retorno;
 }
 
+/**
+ * Un usuario Coordinador acepta la solicitud de otro usuario Estudiante
+ * @param $idUsuario id del alumno solicitante
+ * @param $idDestino id del destino
+ */
+function aceptarSolicitud($idUsuario, $idDestino){
+	/* Basicamente hay que actualizar a True el campo Aceptado
+	 * de entidad Solicitud*/
+}
+
 $server->addFunction("consultarDestinos");
 $server->addFunction("crearSolicitud");
 $server->addFunction("crearDestino");
 $server->addFunction("editarDestino");
 $server->addFunction("borrarDestino");
+$server->addFunction("aceptarSolicitud");
 
 $server->handle();
 
