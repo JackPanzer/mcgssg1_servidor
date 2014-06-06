@@ -18,7 +18,6 @@ $server = new SoapServer("nuestroWSDL.wsdl");
  * @param $idAlumno Alumno solicitante
  */
 function consultarDestinos($idAlumno){
-	//TODO
 	$retorno = new ArrayDestinos();
 	
 	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
@@ -148,7 +147,6 @@ function crearDestino($nombre, $idPais, $idIdioma, $disponible, $numPlazas, $nvl
  * @param $nvlRequerido nivel del idioma requerido
  */
 function editarDestino($idDestino, $nombre, $idPais, $idIdioma, $disponible, $numPlazas, $nvlRequerido){
-	//TODO
 	$retorno;
 	
 	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
@@ -224,6 +222,17 @@ function borrarDestino($idDestino){
 function aceptarSolicitud($idUsuario, $idDestino){
 	/* Basicamente hay que actualizar a True el campo Aceptado
 	 * de entidad Solicitud*/
+	//TODO
+}
+
+/**
+ * Obtener una lista de solicitudes que podremos filtrar por Usuario y/o Destino
+ * o ninguno de los dos dependiento del valor de los parametros
+ * @param $idUsuario id del alumno solicitante
+ * @param $idDestino id del destino
+ */
+function consultarSolicitudes($idUsuario=-1, $idDestino=-1){
+	//TODO
 }
 
 $server->addFunction("consultarDestinos");
@@ -232,6 +241,7 @@ $server->addFunction("crearDestino");
 $server->addFunction("editarDestino");
 $server->addFunction("borrarDestino");
 $server->addFunction("aceptarSolicitud");
+$server->addFunction("consultarSolicitudes");
 
 $server->handle();
 
