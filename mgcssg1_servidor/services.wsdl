@@ -39,33 +39,55 @@
   </wsdl:types>
    	
   <message name="ConsultarDestinosEntrada">
+  	<part name="idAlumno" type="xsd:int" />
   </message>
   
   <message name="ConsultarDestinosSalida">
+  	<part name="retorno" type="tns:GenericResult" />
   </message>
   
   <message name="CrearSolicitudEntrada">
+  	<part name="idAlumno" type="xsd:int" />
+  	<part name="idDestino" type="xsd:int" />
   </message>
   
   <message name="CrearSolicitudSalida">
+  	<part name="retorno" type="tns:GenericResult" />
   </message>
   
   <message name="CrearDestinoEntrada">
+  	<part name="nombre" type="xsd:string" />
+  	<part name="idPais" type="xsd:int" />
+  	<part name="idIdioma" type="xsd:int" />
+  	<part name="disponible" type="xsd:boolean" />
+  	<part name="numPlazas" type="xsd:int" />
+  	<part name="nvlRequerido" type="xsd:int" />
   </message>
   
   <message name="CrearDestinoSalida">
+  	<part name="resultado" type="tns:GenericResult" />
   </message>
   
   <message name="EditarDestinoEntrada">
+  	<part name="idDestino" type="xsd:int" />
+  	<part name="nombre" type="xsd:string" />
+  	<part name="idPais" type="xsd:int" />
+  	<part name="idIdioma" type="xsd:int" />
+  	<part name="disponible" type="xsd:boolean" />
+  	<part name="numPlazas" type="xsd:int" />
+  	<part name="nvlRequerido" type="xsd:int" />
   </message>
   
   <message name="EditarDestinoSalida">
+  	<part name="resultado" type="tns:GenericResult" />
   </message>
   
   <message name="BorrarDestinoEntrada">
+  	<part name="idDestino" type="xsd:int" />
   </message>
   
   <message name="BorrarDestinoSalida">
+  	<part name="resultado" type="tns:GenericResult" />
   </message>
   
   <portType name="ErasmusWSDLPort">
