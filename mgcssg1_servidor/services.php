@@ -26,10 +26,15 @@ function consultarDestinos($idAlumno){
 		if($esquema){
 			$query = "SELECT d.nombre AS nombre, p.nombre AS pais, i.nombre AS idioma, d.disponible,".
 					 " d.numplazas AS numplazas, n.nombre AS nvlrequerido".
-					 " FROM ((((Usuario al INNER JOIN Solicitud s ON al.id = s.idAl)".
-					 " INNER JOIN Destino d ON d.id = s.idDest) INNER JOIN Nivel n ON n.id = d.nvlrequerido)".
-					 " INNER JOIN Pais p ON p.id=d.pais) INNER JOIN Idioma i ON i.id = d.idioma".
-					 " WHERE al.id = ".$idAlumno.";";
+					 " FROM (((((((Usuario u INNER JOIN Matricula m on m.id = u.id)".
+					 " INNER JOIN Asignatura a ON a.id = u.asignatura)".
+					 " INNER JOIN Convalidacion c ON c.asignatura = a.id)".
+					 " INNER JOIN AsignaturaExt ae ON ae.id = c.asignaturaext)".
+					 " INNER JOIN Destino d ON d.id = ae.centro)".
+					 " INNER JOIN Pais p ON d.pais = p.id)".
+					 " INNER JOIN Idioma i ON d.idioma = i.id)".
+					 " INNER JOIN Nivel n ON d.nvlrequerido = n.id".
+					 " WHERE u.id = ".$idAlumno.";";
 			$resultadoQuery = mysql_query(mysql_escape_string($query), $conexion);
 			if($resultadoQuery){
 				$retorno->errno = 0;
