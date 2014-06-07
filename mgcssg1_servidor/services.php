@@ -32,6 +32,7 @@ function consultarDestinos($idAlumno){
 					 " WHERE al.id = ".$idAlumno.";";
 			$resultadoQuery = mysql_query(mysql_escape_string($query), $conexion);
 			if($resultadoQuery){
+				$retorno->errno = 0;
 				while($fila = mysql_fetch_row($resultadoQuery)){
 					$destinoActual = new ComplexDestino();
 					
@@ -46,17 +47,17 @@ function consultarDestinos($idAlumno){
 				}
 			}
 			else{
-				$retorno = -3;
+				$retorno->errno = -3;
 			}
 		}
 		else{
-			$retorno = -2;
+			$retorno->errno = -2;
 		}
 	
 		mysql_close($conexion);
 	}
 	else{
-		$retorno = -1;
+		$retorno->errno = -1;
 	}
 	
 	return $retorno;
@@ -69,7 +70,7 @@ function consultarDestinos($idAlumno){
  */
 function crearSolicitud($idAlumno, $idDestino){
 	
-	$retorno;
+	$retorno = new GenericResult();
 	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
 	if($conexion){
 		$bdactual = mysql_select_db(DB_NAME, $conexion);
@@ -81,16 +82,16 @@ function crearSolicitud($idAlumno, $idDestino){
 		
 		$resultadoquery = mysql_query(mysql_escape_string($query), $conexion);
 		if($resultadoquery){
-			$retorno = 0;
+			$retorno->errno = 0;
 		}
 		else{ /*Sentencia SQL incorrecta*/
-			$retorno = -2;
+			$retorno->errno = -2;
 		}
 		
 		mysql_close($conexion);
 	}
 	else{ /*Fallo en la conexion*/
-		$retorno = -1;
+		$retorno->errno = -1;
 	}
 	
 	return $retorno;
@@ -106,7 +107,7 @@ function crearSolicitud($idAlumno, $idDestino){
  * @param $nvlRequerido nivel del idioma requerido
  */
 function crearDestino($nombre, $idPais, $idIdioma, $disponible, $numPlazas, $nvlRequerido){
-	$retorno;
+	$retorno = new GenericResult();
 	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
 	if($conexion){
 		$bdactual = mysql_select_db(DB_NAME, $conexion);
@@ -121,16 +122,16 @@ function crearDestino($nombre, $idPais, $idIdioma, $disponible, $numPlazas, $nvl
 		
 		$resultadoquery = mysql_query(mysql_escape_string($query), $conexion);
 		if($resultadoquery){
-			$retorno = 0;
+			$retorno->errno = 0;
 		}
 		else{ /*Sentencia SQL incorrecta*/
-			$retorno = -2;
+			$retorno->errno = -2;
 		}
 		
 		mysql_close($conexion);
 	}
 	else{ /*Fallo en la conexion*/
-		$retorno = -1;
+		$retorno->errno = -1;
 	}
 	
 	return $retorno;	
@@ -147,7 +148,7 @@ function crearDestino($nombre, $idPais, $idIdioma, $disponible, $numPlazas, $nvl
  * @param $nvlRequerido nivel del idioma requerido
  */
 function editarDestino($idDestino, $nombre, $idPais, $idIdioma, $disponible, $numPlazas, $nvlRequerido){
-	$retorno;
+	$retorno = new GenericResult();
 	
 	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
 	if($conexion){
@@ -162,20 +163,20 @@ function editarDestino($idDestino, $nombre, $idPais, $idIdioma, $disponible, $nu
 					WHERE id=".$idDestino.";";
 			$resultadoQuery = mysql_query(mysql_escape_string($query), $conexion);
 			if($resultadoQuery){
-				$retorno = 0;
+				$retorno->errno = 0;
 			}
 			else{
-				$retorno = -3;
+				$retorno->errno = -3;
 			}
 		}
 		else{
-			$retorno = -2;
+			$retorno->errno = -2;
 		}
 		
 		mysql_close($conexion);
 	}
 	else{
-		$retorno = -1;
+		$retorno->errno = -1;
 	}
 	
 	return $retorno;
@@ -186,7 +187,7 @@ function editarDestino($idDestino, $nombre, $idPais, $idIdioma, $disponible, $nu
  * @param $idDestino id del destino a eliminar
  */
 function borrarDestino($idDestino){
-	$retorno;
+	$retorno = new GenericResult();
 	
 	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
 	if($conexion){
@@ -195,20 +196,20 @@ function borrarDestino($idDestino){
 			$query = "DELETE FROM Destino WHERE idDestino = ".$idDestino.";";
 			$resultadoQuery = mysql_query(mysql_escape_string($query), $conexion);
 			if($resultadoQuery){
-				$retorno = 0;
+				$retorno->errno = 0;
 			}
 			else{
-				$retorno = -3;
+				$retorno->errno = -3;
 			}
 		}
 		else{
-			$retorno = -2;
+			$retorno->errno = -2;
 		}
 	
 		mysql_close($conexion);
 	}
 	else{
-		$retorno = -1;
+		$retorno->errno = -1;
 	}
 	
 	return $retorno;
