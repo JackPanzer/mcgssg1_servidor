@@ -14,6 +14,24 @@ class ComplexDestino{
 	public $numplazas;
 	public $nvlrequerido;
 	
+	public function ComplexDestino(){
+		$errno = 0;
+	}
+	
+};
+
+class ComplexSolicitud{
+	public $errno;
+	public $nomAlumno;
+	public $idAl;
+	public $nomDestino;
+	public $idDest;
+	public $fecha;
+	public $aceptado;
+	
+	public function ComplexSolicitud(){
+		$errno = 0;
+	}
 };
 
 class ArrayDestinos{
@@ -22,6 +40,15 @@ class ArrayDestinos{
 	
 	public function ArrayDestinos(){
 		$destinos = array();
+	}
+};
+
+class ArraySolicitudes{
+	public $errno;
+	public $solicitudes;
+
+	public function ArraySolicitudes(){
+		$solicitudes = array();
 	}
 };
 

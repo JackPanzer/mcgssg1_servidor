@@ -223,7 +223,29 @@ function borrarDestino($idDestino){
 function aceptarSolicitud($idUsuario, $idDestino){
 	/* Basicamente hay que actualizar a True el campo Aceptado
 	 * de entidad Solicitud*/
-	//TODO
+	$retorno = new GenericResult();
+	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
+	if($conexion){
+		$bdactual = mysql_select_db(DB_NAME, $conexion);
+		
+		$query = "UPDATE Solicitud SET aceptado = true WHERE idAl=". $idUsuario .
+					" AND idDest = ". $idDestino .";";
+		
+		$resultadoquery = mysql_query(mysql_escape_string($query), $conexion);
+		if($resultadoquery){
+			$retorno->errno = 0;
+		}
+		else{ /*Sentencia SQL incorrecta*/
+			$retorno->errno = -2;
+		}
+		
+		mysql_close($conexion);
+	}
+	else{ /*Fallo en la conexion*/
+		$retorno->errno = -1;
+	}
+	
+	return $retorno;//TODO
 }
 
 /**
@@ -234,6 +256,60 @@ function aceptarSolicitud($idUsuario, $idDestino){
  */
 function consultarSolicitudes($idUsuario=-1, $idDestino=-1){
 	//TODO
+	$retorno = new ArraySolicitudes();
+	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
+	if($conexion){
+		$bdactual = mysql_select_db(DB_NAME, $conexion);
+		
+		//Armando la consulta SQL
+		$query = "SELECT u.nombre AS nomAlumno, s.idAl AS idAl, d.nombre AS nomDestino, s.idDest AS idDest, d.fecha AS fecha, d.aceptado AS aceptado".
+				 " FROM (Usuario u INNER JOIN Solicitud s ON u.id = s.idAl)".
+				 " INNER JOIN Destino d ON d.id = s.idDest";
+		
+		if(($idUsuario != -1) && ($idDestino != -1)){
+			$query = $query.
+				" WHERE s.idAl = ". $idUsuario.
+				" AND s.idDest = ". $idDestino;
+		}
+		else if ($idUsuario != -1) {
+			$query = $query.
+				" WHERE s.idAl = ". $idUsuario;
+		}
+		else {
+			$query = $query.
+				" WHERE s.idDest = ". $idDestino;
+		}
+		
+		$query = $query .";";
+		//Fin de consulta SQL
+	
+		$resultadoquery = mysql_query(mysql_escape_string($query), $conexion);
+		if($resultadoquery){
+			$retorno->errno = 0;
+			while($fila = mysql_fetch_row($resultadoquery)){
+				$solicitudActual = new ComplexSolicitud();
+					
+				$solicitudActual->nomAlumno = $fila['nombre'];
+				$solicitudActual->idAl = $fila['idAl'];
+				$solicitudActual->nomDestino = $fila['nomDestino'];
+				$solicitudActual->idDest = $fila['idDest'];
+				$solicitudActual->fecha = $fila['fecha'];
+				$solicitudActual->aceptado = $fila['aceptado'];
+					
+				array_push($retorno->solicitudes, $solicitudActual);
+			}
+		}
+		else{ /*Sentencia SQL incorrecta*/
+			$retorno->errno = -2;
+		}
+	
+		mysql_close($conexion);
+	}
+	else{ /*Fallo en la conexion*/
+		$retorno->errno = -1;
+	}
+	
+	return $retorno;
 }
 
 $server->addFunction("consultarDestinos");

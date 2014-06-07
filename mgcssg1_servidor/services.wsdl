@@ -35,6 +35,26 @@
     			<xsd:element name="destinos" type="tns:ComplexDestino" maxOccurs="unbounded"/>
     		</xsd:sequence>
     	</xsd:complexType>
+    	
+    	<xsd:complexType name="ComplexSolicitud">
+    		<xsd:sequence>
+    			<xsd:element name="errno" type="xsd:int"/>
+    			<xsd:element name="nomAlumno" type="xsd:string" />
+    			<xsd:element name="idAl" type="xsd:int"/>
+    			<xsd:element name="nomDestino" type="xsd:string" />
+    			<xsd:element name="idDest" type="xsd:int" />
+    			<xsd:element name="fecha" type="xsd:date" />
+    			<xsd:element name="aceptado" type="xsd:boolean" />
+    		</xsd:sequence>
+    	</xsd:complexType>
+    	
+    	<xsd:complexType name="ArraySolicitudes">
+    		<xsd:sequence>
+    			<xsd:element name="errno" type="xsd:int"/>
+    			<xsd:element name="solicitudes" type="tns:ComplexSolicitud" maxOccurs="unbounded"/>
+    		</xsd:sequence>
+    	</xsd:complexType>
+    	
   	</xsd:schema>
   </wsdl:types>
    	
@@ -90,6 +110,24 @@
   	<part name="resultado" type="tns:GenericResult" />
   </message>
   
+  <message name="AceptarSolicitudEntrada">
+  	<part name="idUsuario" type="xsd:int" />
+  	<part name="idDestino" type="xsd:int" />
+  </message>
+  
+  <message name="AceptarSolicitudSalida">
+  	<part name="resultado" type="tns:GenericResult" />
+  </message>
+  
+  <message name="ConsultarSolicitudesEntrada">
+  	<part name="idAlumno" type="xsd:int" />
+  	<part name="idDestino" type="xsd:int" />
+  </message>
+  
+  <message name="ConsultarSolicitudesSalida">
+  	<part name="resultado" type="tns:ArraySolicitudes" />
+  </message>
+  
   <portType name="ErasmusWSDLPort">
   	<operation name="consultarDestinos">
   		<input message="tns:ConsultarDestinosEntrada" />
@@ -114,6 +152,16 @@
   	<operation name="borrarDestino">
   		<input message="tns:BorrarDestinoEntrada" />
   		<output message="tns:BorrarDestinoEntrada" />
+  	</operation>
+  	
+  	<operation name="aceptarSolicitud">
+  		<input message="tns:AceptarSolicitudEntrada" />
+  		<output message="tns:AceptarSolicitudSalida" />
+  	</operation>
+  	
+  	<operation name="consultarSolicitudes">
+  		<input message="tns:ConsultarSolicitudesEntrada" />
+  		<output message="tns:ConsultarSolicitudesSalida" />
   	</operation>
   </portType>
  
@@ -165,6 +213,30 @@
     </operation>
     <operation name="borrarDestino">
         <soap:operation soapAction="urn:ErasmusWSDL#borrarDestino" />
+        <input>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    
+    <operation name="aceptarSolicitud">
+        <soap:operation soapAction="urn:ErasmusWSDL#aceptarSolicitud" />
+        <input>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    
+    <operation name="consultarSolicitudes">
+        <soap:operation soapAction="urn:ErasmusWSDL#consultarSolicitudes" />
         <input>
           <soap:body use="literal" namespace="urn:ErasmusWSDL"
                      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
