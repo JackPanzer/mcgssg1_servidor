@@ -69,7 +69,12 @@ function consultarDestinos($idAlumno){
 }
 
 /**
- * Insertar una nueva solicitud para el Usuario alumno y Destino indicado
+ * Insertar una nueva solicitud para el Usuario alumno y Destino indicado.
+ * 
+ * PRECONDICIONES: La tabla de solicitudes, al igual que el resto de tablas
+ * cuya clave primaria es un valor numérico, debe tener activado el
+ * autoincremento.
+ * 
  * @param $idAlumno Alumno solicitante
  * @param $idDestino
  */
@@ -104,6 +109,11 @@ function crearSolicitud($idAlumno, $idDestino){
 
 /**
  * Insertar un nuevo destino dados sus datos
+ * 
+ * PRECONDICIONES: La tabla de destinos, al igual que el resto de tablas
+ * cuya clave primaria es un valor numérico, debe tener activado el
+ * autoincremento.
+ * 
  * @param $nombre nombre del destino
  * @param $idPais id del pais al que pertenece
  * @param $idIdioma id del idioma hablado
@@ -189,6 +199,7 @@ function editarDestino($idDestino, $nombre, $idPais, $idIdioma, $disponible, $nu
 
 /**
  * Borrar un destino dado su Id
+ * 
  * @param $idDestino id del destino a eliminar
  */
 function borrarDestino($idDestino){
@@ -315,6 +326,16 @@ function consultarSolicitudes($idUsuario=-1, $idDestino=-1){
 	}
 	
 	return $retorno;
+}
+
+/**
+ * Obtiene una lista de asignaturas a la que un alumno
+ * está matriculado
+ * 
+ * @param $idAlumno ID del Usuario sobre el que hacer la petición
+ */
+function consultarAsignaturasMatriculadas($idAlumno){
+	
 }
 
 $server->addFunction("consultarDestinos");
