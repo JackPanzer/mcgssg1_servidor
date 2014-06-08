@@ -1,11 +1,7 @@
 <?php
 
 include 'capaDatos.php';
-
-define('DB_SERVER','<direccion servidor>');
-define('DB_NAME','<nombre base de datos>');
-define('DB_USER','');
-define('DB_PASS','');
+include 'connectiondata.php';
 
 ini_set("soap.wsdl_cache_enabled","0");
 
@@ -335,7 +331,45 @@ function consultarSolicitudes($idUsuario=-1, $idDestino=-1){
  * @param $idAlumno ID del Usuario sobre el que hacer la petición
  */
 function consultarAsignaturasMatriculadas($idAlumno){
+	$retorno = new ArrayAsignaturas();
+	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
+	if($conexion){
+		$bdactual = mysql_select_db(DB_NAME, $conexion);
 	
+		//Armando la consulta SQL
+		$query = "SELECT as.nombre AS nombre, t.nombre AS titulacion, as.creditos AS creditos, c.nombre AS coordinador".
+				 " FROM (((Asignatura as INNER JOIN Usuario c ON c.id = as.coordinador)".
+				 " INNER JOIN Titulacion t ON t.id = as.titulacion)".
+				 " INNER JOIN Matricula m ON m.asignatura = as.id)".
+				 " INNER JOIN Usuario al ON al.id = m.id".
+				 " WHERE al.id = ". $idAlumno .";";
+		//Fin de consulta SQL
+	
+		$resultadoquery = mysql_query(mysql_escape_string($query), $conexion);
+		if($resultadoquery){
+			$retorno->errno = 0;
+			while($fila = mysql_fetch_row($resultadoquery)){
+				$asignaturaActual = new ComplexAsignatura();
+					
+				$asignaturaActual->nombre = $fila['nombre'];
+				$asignaturaActual->titulacion = $fila['titulacion'];
+				$asignaturaActual->creditos = $fila['creditos'];
+				$asignaturaActual->coordinador = $fila['coordinador'];
+					
+				array_push($retorno->asignaturas, $asignaturaActual);
+			}
+		}
+		else{ /*Sentencia SQL incorrecta*/
+			$retorno->errno = -2;
+		}
+	
+		mysql_close($conexion);
+	}
+	else{ /*Fallo en la conexion*/
+		$retorno->errno = -1;
+	}
+	
+	return $retorno;
 }
 
 $server->addFunction("consultarDestinos");
@@ -345,6 +379,7 @@ $server->addFunction("editarDestino");
 $server->addFunction("borrarDestino");
 $server->addFunction("aceptarSolicitud");
 $server->addFunction("consultarSolicitudes");
+$server->addFunction("consultarAsignaturasMatriculadas");
 
 $server->handle();
 
