@@ -337,10 +337,10 @@ function consultarAsignaturasMatriculadas($idAlumno){
 		$bdactual = mysql_select_db(DB_NAME, $conexion);
 	
 		//Armando la consulta SQL
-		$query = "SELECT as.nombre AS nombre, t.nombre AS titulacion, as.creditos AS creditos, c.nombre AS coordinador".
-				 " FROM (((Asignatura as INNER JOIN Usuario c ON c.id = as.coordinador)".
-				 " INNER JOIN Titulacion t ON t.id = as.titulacion)".
-				 " INNER JOIN Matricula m ON m.asignatura = as.id)".
+		$query = "SELECT asig.nombre AS nombre, t.nombre AS titulacion, asig.creditos AS creditos, c.nombre AS coordinador".
+				 " FROM (((Asignatura asig INNER JOIN Usuario c ON c.id = asig.coordinador)".
+				 " INNER JOIN Titulacion t ON t.id = asig.titulacion)".
+				 " INNER JOIN Matricula m ON m.asignatura = asig.id)".
 				 " INNER JOIN Usuario al ON al.id = m.id".
 				 " WHERE al.id = ". $idAlumno .";";
 		//Fin de consulta SQL
@@ -355,6 +355,55 @@ function consultarAsignaturasMatriculadas($idAlumno){
 				$asignaturaActual->titulacion = $fila['titulacion'];
 				$asignaturaActual->creditos = $fila['creditos'];
 				$asignaturaActual->coordinador = $fila['coordinador'];
+					
+				array_push($retorno->asignaturas, $asignaturaActual);
+			}
+		}
+		else{ /*Sentencia SQL incorrecta*/
+			$retorno->errno = -2;
+		}
+	
+		mysql_close($conexion);
+	}
+	else{ /*Fallo en la conexion*/
+		$retorno->errno = -1;
+	}
+	
+	return $retorno;
+}
+
+/**
+ * Obtiene una lista de asignaturas extrangeras asociadas
+ * a un alumno.
+ * 
+ * @param $idAlumno ID del alumno a hacer la petición.
+ */
+function consultarExtrangerasAlumno($idAlumno){
+	$retorno = new ArrayAsignaturasExt();
+	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
+	if($conexion){
+		$bdactual = mysql_select_db(DB_NAME, $conexion);
+	
+		//Armando la consulta SQL
+		$query = "SELECT aex.nombre AS nombre, aex.creditos AS creditos, des.nombre AS centro".
+				" FROM (((((Asignatura asig INNER JOIN Titulacion t ON t.id = asig.titulacion)".
+				" INNER JOIN Matricula m ON m.asignatura = asig.id)".
+				" INNER JOIN Usuario al ON al.id = m.id)".
+				" INNER JOIN Convalidacion co ON co.asignatura = asig.id)".
+				" INNER JOIN AsignaturaExt aex ON co.AsignaturaExt aex.id)".
+				" INNER JOIN Destino des ON des.id = aex.centro".
+				" WHERE al.id = ". $idAlumno .";";
+		//Fin de consulta SQL
+	
+		$resultadoquery = mysql_query(mysql_escape_string($query), $conexion);
+		if($resultadoquery){
+			$retorno->errno = 0;
+			while($fila = mysql_fetch_row($resultadoquery)){
+				$asignaturaActual = new ComplexAsignaturaExt();
+					
+				$asignaturaActual->nombre = $fila['nombre'];
+				$asignaturaActual->creditos = $fila['creditos'];
+				$asignaturaActual->centro = $fila['centro'];
 					
 				array_push($retorno->asignaturas, $asignaturaActual);
 			}

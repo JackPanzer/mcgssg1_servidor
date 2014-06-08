@@ -169,6 +169,14 @@
   	<part name="resultado" type="tns:ArrayAsignaturas" />
   </message>
   
+  <message name="ConsultarExtrangerasAlumnoEntrada">
+  	<part name="idAlumno" type="xsd:int" />
+  </message>
+  
+  <message name="ConsultarExtrangerasAlumnoSalida">
+  	<part name="resultado" type="tns:ArrayAsignaturasExt" />
+  </message>
+  
   <portType name="ErasmusWSDLPort">
   	<operation name="consultarDestinos">
   		<input message="tns:ConsultarDestinosEntrada" />
@@ -208,6 +216,11 @@
   	<operation name="consultarAsignaturasMatriculadas">
   		<input message="tns:ConsultarAsignaturasMatriculadasEntrada" />
   		<output message="tns:ConsultarAsignaturasMatriculadasSalida" />
+  	</operation>
+  	
+  	<operation name="consultarExtrangerasAlumno">
+  		<input message="tns:ConsultarExtrangerasAlumnoEntrada" />
+  		<output message="tns:ConsultarExtrangerasAlumnoSalida" />
   	</operation>
   </portType>
  
@@ -295,6 +308,18 @@
     
     <operation name="consultarAsignaturasMatriculadas">
         <soap:operation soapAction="urn:ErasmusWSDL#consultarAsignaturasMatriculadas" />
+        <input>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    
+    <operation name="consultarExtrangerasAlumno">
+        <soap:operation soapAction="urn:ErasmusWSDL#consultarExtrangerasAlumno" />
         <input>
           <soap:body use="literal" namespace="urn:ErasmusWSDL"
                      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
