@@ -429,6 +429,7 @@ $server->addFunction("borrarDestino");
 $server->addFunction("aceptarSolicitud");
 $server->addFunction("consultarSolicitudes");
 $server->addFunction("consultarAsignaturasMatriculadas");
+$server->addFunction("consultarExtrangerasAlumno");
 
 $server->handle();
 
