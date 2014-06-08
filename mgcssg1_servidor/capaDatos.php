@@ -121,4 +121,35 @@ class ArrayAsignaturas{
 	}
 }
 
+/**
+ * Representa la información de una asignatura.
+ *
+ */
+class ComplexAsignaturaExt{
+	public $errno;
+
+	public $nombre;
+	public $creditos;
+	public $centro;
+
+	public function ComplexAsignaturaExt(){
+		$errno = 0;
+	}
+};
+
+/**
+ * Representa una lista de asignaturas
+ *
+ */
+class ArrayAsignaturasExt{
+	public $errno;
+
+	public $asignaturas;
+
+	public function ArrayAsignaturaExt(){
+		$errno = 0;
+		$asignaturas = array();
+	}
+}
+
 ?>
