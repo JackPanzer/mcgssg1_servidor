@@ -200,7 +200,7 @@
   	
   	<operation name="borrarDestino">
   		<input message="tns:BorrarDestinoEntrada" />
-  		<output message="tns:BorrarDestinoEntrada" />
+  		<output message="tns:BorrarDestinoSalida" />
   	</operation>
   	
   	<operation name="aceptarSolicitud">
