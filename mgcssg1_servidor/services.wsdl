@@ -88,6 +88,22 @@
     		</xsd:sequence>
     	</xsd:complexType>
     	
+    	<xsd:complexType name="ComplexUsuario">
+    		<xsd:sequence>
+    			<xsd:element name="errno" type="xsd:int" />
+    			<xsd:element name="id" type="xsd:int" />
+    			<xsd:element name="nombre" type="xsd:string" />
+    			<xsd:element name="apellidos" type="xsd:string" />
+    			<xsd:element name="nif" type="xsd:string" />
+    			<xsd:element name="rol" type="xsd:int" />
+    			<xsd:element name="direccion" type="xsd:string" />
+    			<xsd:element name="poblacion" type="xsd:string" />
+    			<xsd:element name="nick" type="xsd:string" />
+    			<xsd:element name="passwd" type="xsd:string" />
+    			<xsd:element name="titulacion" type="xsd:int" />
+    		</xsd:sequence>
+    	</xsd:complexType>
+    	
   	</xsd:schema>
   </wsdl:types>
    	
@@ -177,6 +193,15 @@
   	<part name="resultado" type="tns:ArrayAsignaturasExt" />
   </message>
   
+  <message name="LoginUsuarioEntrada">
+  	<part name="nick" type="xsd:string" />
+  	<part name="passwd" type="xsd:string" />
+  </message>
+  
+  <message name="LoginUsuarioSalida">
+  	<part name="resultado" type="tns:ComplexUsuario" />
+  </message>
+  
   <portType name="ErasmusWSDLPort">
   	<operation name="consultarDestinos">
   		<input message="tns:ConsultarDestinosEntrada" />
@@ -221,6 +246,11 @@
   	<operation name="consultarExtrangerasAlumno">
   		<input message="tns:ConsultarExtrangerasAlumnoEntrada" />
   		<output message="tns:ConsultarExtrangerasAlumnoSalida" />
+  	</operation>
+  	
+  	<operation name="loginUsuario">
+  		<input message="tns:LoginUsuarioEntrada" />
+  		<output message="tns:LoginUsuarioSalida" />
   	</operation>
   </portType>
  
@@ -320,6 +350,18 @@
     
     <operation name="consultarExtrangerasAlumno">
         <soap:operation soapAction="urn:ErasmusWSDL#consultarExtrangerasAlumno" />
+        <input>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    
+    <operation name="loginUsuario">
+        <soap:operation soapAction="urn:ErasmusWSDL#loginUsuario" />
         <input>
           <soap:body use="literal" namespace="urn:ErasmusWSDL"
                      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />

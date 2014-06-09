@@ -152,4 +152,27 @@ class ArrayAsignaturasExt{
 	}
 }
 
+/**
+ * Representa a un usuario registrado en el sistema
+ *
+ */
+class ComplexUsuario {
+	public $errno;
+	
+	public $id;
+	public $nombre;
+	public $apellidos;
+	public $nif;
+	public $rol;
+	public $direccion;
+	public $poblacion;
+	public $nick;
+	public $passwd;
+	public $titulacion;
+	
+	public function ComplexUsuario(){
+		$errno = 0;
+	}
+}
+
 ?>

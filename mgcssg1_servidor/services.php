@@ -421,6 +421,57 @@ function consultarExtrangerasAlumno($idAlumno){
 	return $retorno;
 }
 
+/**
+ * Función que devuelve un usuario registrado en el
+ * sistema en caso de que esté registrado
+ * 
+ * PRECONDICIONES: La contraseña del usuario debería
+ * ir ya encriptada desde el cliente. La base de datos
+ * sólo almacenará los hashes correspondientes.
+ * 
+ * @param $nick Apodo el usuario en el sistema
+ * @param $passwd Contraseña del usuario en el sistema
+ */
+function loginUsuario($nick, $passwd){
+	$retorno = new ComplexUsuario();
+	$conexion = mysql_connect(DB_SERVER, DB_USER, DB_PASS);
+	if($conexion){
+		$bdactual = mysql_select_db(DB_NAME, $conexion);
+	
+		//Armando la consulta SQL
+		$query = "SELECT *".
+				 " FROM Usuario".
+				 " WHERE nick = ".$nick." AND passwd = ".$passwd.";";
+		//Fin de consulta SQL
+	
+		$resultadoquery = mysql_query(mysql_escape_string($query), $conexion);
+		if($resultadoquery){
+			$retorno->errno = 0;
+			$fila = mysql_fetch_row($resultadoquery);
+			$retorno->id = $fila['id'];
+			$retorno->nombre = $fila['nombre'];
+			$retorno->apellidos = $fila['apellidos'];
+			$retorno->nif = $fila['nif'];
+			$retorno->rol = $fila['rol'];
+			$retorno->direccion = $fila['direccion'];
+			$retorno->poblacion = $fila['poblacion'];
+			$retorno->nick = $nick;
+			$retorno->passwd = $passwd;
+			$retorno->titulacion = $fila['titulacion'];
+		}
+		else{ /*Sentencia SQL incorrecta*/
+			$retorno->errno = -2;
+		}
+	
+		mysql_close($conexion);
+	}
+	else{ /*Fallo en la conexion*/
+		$retorno->errno = -1;
+	}
+	
+	return $retorno;
+}
+
 $server->addFunction("consultarDestinos");
 $server->addFunction("crearSolicitud");
 $server->addFunction("crearDestino");
@@ -430,6 +481,7 @@ $server->addFunction("aceptarSolicitud");
 $server->addFunction("consultarSolicitudes");
 $server->addFunction("consultarAsignaturasMatriculadas");
 $server->addFunction("consultarExtrangerasAlumno");
+$server->addFunction("loginUsuario");
 
 $server->handle();
 
