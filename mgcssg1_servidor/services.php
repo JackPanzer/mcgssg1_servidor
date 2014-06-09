@@ -20,7 +20,7 @@ function consultarDestinos($idAlumno){
 	if($conexion){
 		$esquema = mysql_select_db(DB_NAME, $conexion);
 		if($esquema){
-			$query = "SELECT d.nombre AS nombre, p.nombre AS pais, i.nombre AS idioma, d.disponible,".
+			$query = sprintf("SELECT d.nombre AS nombre, p.nombre AS pais, i.nombre AS idioma, d.disponible,".
 					 " d.numplazas AS numplazas, n.nombre AS nvlrequerido".
 					 " FROM (((((((Usuario u INNER JOIN Matricula m on m.id = u.id)".
 					 " INNER JOIN Asignatura a ON a.id = u.asignatura)".
@@ -30,8 +30,8 @@ function consultarDestinos($idAlumno){
 					 " INNER JOIN Pais p ON d.pais = p.id)".
 					 " INNER JOIN Idioma i ON d.idioma = i.id)".
 					 " INNER JOIN Nivel n ON d.nvlrequerido = n.id".
-					 " WHERE u.id = ".$idAlumno.";";
-			$resultadoQuery = mysql_query(mysql_escape_string($query), $conexion);
+					 " WHERE u.id = %d;", $idAlumno);
+			$resultadoQuery = mysql_query($query, $conexion);
 			if($resultadoQuery){
 				$retorno->errno = 0;
 				while($fila = mysql_fetch_row($resultadoQuery)){
@@ -82,11 +82,10 @@ function crearSolicitud($idAlumno, $idDestino){
 		$bdactual = mysql_select_db(DB_NAME, $conexion);
 		$fechaactual = date("d/m/Y");
 		
-		$query = "INSERT INTO Solicitud VALUES(".$idAlumno.", 
-												".$idDestino.", 
-												'".$fechaactual."', false);";
+		$query = sprintf("INSERT INTO Solicitud VALUES(%d,%d,'%s', false);",
+				 $idAlumno, $idDestino, mysql_escape_string($fechaactual));
 		
-		$resultadoquery = mysql_query(mysql_escape_string($query), $conexion);
+		$resultadoquery = mysql_query($query, $conexion);
 		if($resultadoquery){
 			$retorno->errno = 0;
 		}
@@ -123,15 +122,11 @@ function crearDestino($nombre, $idPais, $idIdioma, $disponible, $numPlazas, $nvl
 	if($conexion){
 		$bdactual = mysql_select_db(DB_NAME, $conexion);
 		
-		$query = "INSERT INTO Destino('nombre', 'pais', 'idioma', 'disponible', 'numplazas', 'nvlrequerido')".
-												" VALUES('".$nombre."', 
-												".$idPais.",
-												".$idIdioma.",
-												".$disponible.",
-												".$numPlazas.", 
-												".$nvlRequerido.", false);";
+		$query = sprintf("INSERT INTO Destino('nombre', 'pais', 'idioma', 'disponible', 'numplazas', 'nvlrequerido')".
+				" VALUES('%s',%d,%d,%d,%d,%d);",
+				mysql_escape_string($nombre), $idPais, $idIdioma, $disponible, $numPlazas, $nvlRequerido);
 		
-		$resultadoquery = mysql_query(mysql_escape_string($query), $conexion);
+		$resultadoquery = mysql_query($query, $conexion);
 		if($resultadoquery){
 			$retorno->errno = 0;
 		}
@@ -165,14 +160,12 @@ function editarDestino($idDestino, $nombre, $idPais, $idIdioma, $disponible, $nu
 	if($conexion){
 		$esquema = mysql_select_db(DB_NAME, $conexion);
 		if($esquema){
-			$query = "UPDATE FROM Destino SET nombre='".$nombre."' 
-					pais=".$idPais." 
-					idioma=".$idIdioma." 
-					disponible=".$disponible." 
-					numPlazas=".$numPlazas." 
-					nvlRequerido=".$nvlRequerido." 
-					WHERE id=".$idDestino.";";
-			$resultadoQuery = mysql_query(mysql_escape_string($query), $conexion);
+			$query = sprintf("UPDATE FROM Destino SET nombre='%s' 
+					pais=%d idioma=%d disponible=%d numPlazas=%d nvlRequerido=%d 
+					WHERE id=%d;",
+					mysql_escape_string($nombre), $idPais, $idIdioma, $disponible,
+					$numPlazas, $nvlRequerido, $idDestino);
+			$resultadoQuery = mysql_query($query, $conexion);
 			if($resultadoQuery){
 				$retorno->errno = 0;
 			}
@@ -205,8 +198,8 @@ function borrarDestino($idDestino){
 	if($conexion){
 		$esquema = mysql_select_db(DB_NAME, $conexion);
 		if($esquema){
-			$query = "DELETE FROM Destino WHERE idDestino = ".$idDestino.";";
-			$resultadoQuery = mysql_query(mysql_escape_string($query), $conexion);
+			$query = sprintf("DELETE FROM Destino WHERE idDestino = %d;", $idDestino);
+			$resultadoQuery = mysql_query($query, $conexion);
 			if($resultadoQuery){
 				$retorno->errno = 0;
 			}
@@ -240,10 +233,10 @@ function aceptarSolicitud($idUsuario, $idDestino){
 	if($conexion){
 		$bdactual = mysql_select_db(DB_NAME, $conexion);
 		
-		$query = "UPDATE Solicitud SET aceptado = true WHERE idAl=". $idUsuario .
-					" AND idDest = ". $idDestino .";";
+		$query = sprintf("UPDATE Solicitud SET aceptado = true WHERE idAl= %d AND idDest = %d;",
+			$idUsuario, $idDestino);
 		
-		$resultadoquery = mysql_query(mysql_escape_string($query), $conexion);
+		$resultadoquery = mysql_query($query, $conexion);
 		if($resultadoquery){
 			$retorno->errno = 0;
 		}
@@ -280,22 +273,22 @@ function consultarSolicitudes($idUsuario=-1, $idDestino=-1){
 		
 		if(($idUsuario != -1) && ($idDestino != -1)){
 			$query = $query.
-				" WHERE s.idAl = ". $idUsuario.
-				" AND s.idDest = ". $idDestino;
+				sprintf(" WHERE s.idAl = %d", $idUsuario).
+				sprintf(" AND s.idDest = %d", $idDestino);
 		}
 		else if ($idUsuario != -1) {
 			$query = $query.
-				" WHERE s.idAl = ". $idUsuario;
+				sprintf(" WHERE s.idAl = %d", $idUsuario);
 		}
 		else {
 			$query = $query.
-				" WHERE s.idDest = ". $idDestino;
+				sprintf(" WHERE s.idDest = %d", $idDestino);
 		}
 		
 		$query = $query .";";
 		//Fin de consulta SQL
 	
-		$resultadoquery = mysql_query(mysql_escape_string($query), $conexion);
+		$resultadoquery = mysql_query($query, $conexion);
 		if($resultadoquery){
 			$retorno->errno = 0;
 			while($fila = mysql_fetch_row($resultadoquery)){
@@ -337,15 +330,15 @@ function consultarAsignaturasMatriculadas($idAlumno){
 		$bdactual = mysql_select_db(DB_NAME, $conexion);
 	
 		//Armando la consulta SQL
-		$query = "SELECT asig.nombre AS nombre, t.nombre AS titulacion, asig.creditos AS creditos, c.nombre AS coordinador".
+		$query = sprintf("SELECT asig.nombre AS nombre, t.nombre AS titulacion, asig.creditos AS creditos, c.nombre AS coordinador".
 				 " FROM (((Asignatura asig INNER JOIN Usuario c ON c.id = asig.coordinador)".
 				 " INNER JOIN Titulacion t ON t.id = asig.titulacion)".
 				 " INNER JOIN Matricula m ON m.asignatura = asig.id)".
 				 " INNER JOIN Usuario al ON al.id = m.id".
-				 " WHERE al.id = ". $idAlumno .";";
+				 " WHERE al.id = %d;", $idAlumno);
 		//Fin de consulta SQL
 	
-		$resultadoquery = mysql_query(mysql_escape_string($query), $conexion);
+		$resultadoquery = mysql_query($query, $conexion);
 		if($resultadoquery){
 			$retorno->errno = 0;
 			while($fila = mysql_fetch_row($resultadoquery)){
@@ -385,17 +378,17 @@ function consultarExtrangerasAlumno($idAlumno){
 		$bdactual = mysql_select_db(DB_NAME, $conexion);
 	
 		//Armando la consulta SQL
-		$query = "SELECT aex.nombre AS nombre, aex.creditos AS creditos, des.nombre AS centro".
+		$query = sprintf("SELECT aex.nombre AS nombre, aex.creditos AS creditos, des.nombre AS centro".
 				" FROM (((((Asignatura asig INNER JOIN Titulacion t ON t.id = asig.titulacion)".
 				" INNER JOIN Matricula m ON m.asignatura = asig.id)".
 				" INNER JOIN Usuario al ON al.id = m.id)".
 				" INNER JOIN Convalidacion co ON co.asignatura = asig.id)".
 				" INNER JOIN AsignaturaExt aex ON co.AsignaturaExt aex.id)".
 				" INNER JOIN Destino des ON des.id = aex.centro".
-				" WHERE al.id = ". $idAlumno .";";
+				" WHERE al.id = %d;", mysql_escape_string($idAlumno));
 		//Fin de consulta SQL
 	
-		$resultadoquery = mysql_query(mysql_escape_string($query), $conexion);
+		$resultadoquery = mysql_query($query, $conexion);
 		if($resultadoquery){
 			$retorno->errno = 0;
 			while($fila = mysql_fetch_row($resultadoquery)){
