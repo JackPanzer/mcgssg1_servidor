@@ -439,15 +439,17 @@ function loginUsuario($nick, $passwd){
 		$bdactual = mysql_select_db(DB_NAME, $conexion);
 	
 		//Armando la consulta SQL
-		$query = "SELECT *".
+		$query = sprintf("SELECT *".
 				 " FROM Usuario".
-				 " WHERE nick = ".$nick." AND passwd = ".$passwd.";";
+				 " WHERE nick = '%s' AND passwd = '%s';",
+					mysql_escape_string($nick),
+					mysql_escape_string($passwd));
 		//Fin de consulta SQL
 	
-		$resultadoquery = mysql_query(mysql_escape_string($query), $conexion);
+		$resultadoquery = mysql_query($query, $conexion);
 		if($resultadoquery){
 			$retorno->errno = 0;
-			$fila = mysql_fetch_row($resultadoquery);
+			$fila = mysql_fetch_assoc($resultadoquery);
 			$retorno->id = $fila['id'];
 			$retorno->nombre = $fila['nombre'];
 			$retorno->apellidos = $fila['apellidos'];
