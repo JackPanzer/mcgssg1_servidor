@@ -34,7 +34,7 @@ function consultarDestinos($idAlumno){
 			$resultadoQuery = mysql_query($query, $conexion);
 			if($resultadoQuery){
 				$retorno->errno = 0;
-				while($fila = mysql_fetch_row($resultadoQuery)){
+				while($fila = mysql_fetch_assoc($resultadoQuery)){
 					$destinoActual = new ComplexDestino();
 					
 					$destinoActual->nombre = $fila['nombre'];
@@ -291,7 +291,7 @@ function consultarSolicitudes($idUsuario=-1, $idDestino=-1){
 		$resultadoquery = mysql_query($query, $conexion);
 		if($resultadoquery){
 			$retorno->errno = 0;
-			while($fila = mysql_fetch_row($resultadoquery)){
+			while($fila = mysql_fetch_assoc($resultadoquery)){
 				$solicitudActual = new ComplexSolicitud();
 					
 				$solicitudActual->nomAlumno = $fila['nombre'];
@@ -341,7 +341,7 @@ function consultarAsignaturasMatriculadas($idAlumno){
 		$resultadoquery = mysql_query($query, $conexion);
 		if($resultadoquery){
 			$retorno->errno = 0;
-			while($fila = mysql_fetch_row($resultadoquery)){
+			while($fila = mysql_fetch_assoc($resultadoquery)){
 				$asignaturaActual = new ComplexAsignatura();
 					
 				$asignaturaActual->nombre = $fila['nombre'];
@@ -391,7 +391,7 @@ function consultarExtrangerasAlumno($idAlumno){
 		$resultadoquery = mysql_query($query, $conexion);
 		if($resultadoquery){
 			$retorno->errno = 0;
-			while($fila = mysql_fetch_row($resultadoquery)){
+			while($fila = mysql_fetch_assoc($resultadoquery)){
 				$asignaturaActual = new ComplexAsignaturaExt();
 					
 				$asignaturaActual->nombre = $fila['nombre'];
