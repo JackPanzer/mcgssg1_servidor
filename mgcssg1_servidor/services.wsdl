@@ -20,6 +20,7 @@
     	<xsd:complexType name="ComplexDestino">
     		<xsd:sequence>
     			<xsd:element name="errno" type="xsd:int"/>
+    			<xsd:element name="id" type="xsd:int"/>
     			<xsd:element name="nombre" type="xsd:string"/>
     			<xsd:element name="pais" type="xsd:string"/>
     			<xsd:element name="idioma" type="xsd:string"/>

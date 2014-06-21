@@ -31,6 +31,7 @@ class GenericResult{
 class ComplexDestino{
 	
 	public $errno;
+	public $id;
 	public $nombre;
 	public $pais;
 	public $idioma;
