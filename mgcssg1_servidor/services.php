@@ -24,7 +24,7 @@ function consultarDestinos($idAlumno) {
 			$query = sprintf ( "SELECT d.id AS id, d.nombre AS nombre, p.nombre AS pais, i.nombre AS idioma, d.disponible," . 
 								" d.numplazas AS numplazas, n.nombre AS nvlrequerido" . 
 								" FROM (((((((Usuario u INNER JOIN Matricula m on m.id = u.id)" .
-								" INNER JOIN Asignatura a ON a.id = u.asignatura)" . 
+								" INNER JOIN Asignatura a ON a.id = m.asignatura)" . 
 								" INNER JOIN Convalidacion c ON c.asignatura = a.id)" . 
 								" INNER JOIN AsignaturaExt ae ON ae.id = c.asignaturaext)" . 
 								" INNER JOIN Destino d ON d.id = ae.centro)" . 

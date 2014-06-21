@@ -113,7 +113,7 @@
   </message>
   
   <message name="ConsultarDestinosSalida">
-  	<part name="retorno" type="tns:GenericResult" />
+  	<part name="retorno" type="tns:ArrayDestinos" />
   </message>
   
   <message name="CrearSolicitudEntrada">

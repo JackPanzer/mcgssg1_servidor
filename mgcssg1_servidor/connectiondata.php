@@ -1,8 +1,8 @@
 <?php
 
-	define('DB_SERVER','<direccion servidor>');
-	define('DB_NAME','<nombre base de datos>');
-	define('DB_USER','');
-	define('DB_PASS','');
+	define('DB_SERVER','localhost');
+	define('DB_NAME','erasmus');
+	define('DB_USER','erasmus');
+	define('DB_PASS','erasmus');
 
 ?>
