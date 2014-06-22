@@ -36,6 +36,7 @@ function consultarDestinos($idAlumno) {
 			if ($resultadoQuery) {
 				$retorno->errno = 0;
 				if (mysql_num_rows ( $resultadoQuery ) != 0) {
+					$temparray = array();
 					while ( $fila = mysql_fetch_assoc ( $resultadoQuery ) ) {
 						$destinoActual = new ComplexDestino ();
 						
@@ -47,8 +48,9 @@ function consultarDestinos($idAlumno) {
 						$destinoActual->numplazas = $fila ['numplazas'];
 						$destinoActual->nvlrequerido = $fila ['nvlrequerido'];
 						
-						array_push ( $retorno->destinos, $destinoActual );
+						array_push ( $temparray, $destinoActual );
 					}
+					$retorno->destinos = $temparray;
 				} else { // La consulta no devolvió ningún resultado
 					$retorno->errno = 1;
 				}

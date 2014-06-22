@@ -33,7 +33,7 @@
     	<xsd:complexType name="ArrayDestinos">
     		<xsd:sequence>
     			<xsd:element name="errno" type="xsd:int"/>
-    			<xsd:element name="destinos" type="tns:ComplexDestino" maxOccurs="unbounded"/>
+    			<xsd:element name="destinos" type="tns:ComplexDestino" maxOccurs="unbounded" minOccurs="0"/>
     		</xsd:sequence>
     	</xsd:complexType>
     	
@@ -202,7 +202,13 @@
   <message name="LoginUsuarioSalida">
   	<part name="resultado" type="tns:ComplexUsuario" />
   </message>
-  
+
+  <wsdl:message name="NewOperationRequest">
+  	<wsdl:part name="NewOperationRequest" type="xsd:string"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="NewOperationResponse">
+  	<wsdl:part name="NewOperationResponse" type="xsd:string"></wsdl:part>
+  </wsdl:message>
   <portType name="ErasmusWSDLPort">
   	<operation name="consultarDestinos">
   		<input message="tns:ConsultarDestinosEntrada" />
@@ -252,7 +258,7 @@
   	<operation name="loginUsuario">
   		<input message="tns:LoginUsuarioEntrada" />
   		<output message="tns:LoginUsuarioSalida" />
-  	</operation>
+  	</operation>
   </portType>
  
   <binding name="ErasmusWSDLBinding" type="tns:ErasmusWSDLPort">
