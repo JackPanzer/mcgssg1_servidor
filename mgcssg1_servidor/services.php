@@ -1,6 +1,7 @@
 <?php
 include 'capaDatos.php';
 include 'connectiondata.php';
+include 'logger.php';
 
 ini_set ( "soap.wsdl_cache_enabled", "0" );
 
@@ -32,6 +33,7 @@ function consultarDestinos($idAlumno) {
 								" INNER JOIN Idioma i ON d.idioma = i.id)" . 
 								" INNER JOIN Nivel n ON d.nvlrequerido = n.id" . 
 								" WHERE u.id = %d AND d.numplazas > 0;", $idAlumno );
+			logToFile("consultarDestinos.txt", $query);
 			$resultadoQuery = mysql_query ( $query, $conexion );
 			if ($resultadoQuery) {
 				$retorno->errno = 0;
@@ -90,6 +92,7 @@ function crearSolicitud($idAlumno, $idDestino) {
 		
 		$query = sprintf ( "INSERT INTO Solicitud VALUES(%d,%d,'%s', false);", $idAlumno, $idDestino, mysql_escape_string ( $fechaactual ) );
 		
+		logToFile("crearSolicitud.txt", $query);
 		$resultadoquery = mysql_query ( $query, $conexion );
 		if ($resultadoquery) {
 			$retorno->errno = 0;
@@ -133,6 +136,7 @@ function crearDestino($nombre, $idPais, $idIdioma, $disponible, $numPlazas, $nvl
 		
 		$query = sprintf ( "INSERT INTO Destino('nombre', 'pais', 'idioma', 'disponible', 'numplazas', 'nvlrequerido')" . " VALUES('%s',%d,%d,%d,%d,%d);", mysql_escape_string ( $nombre ), $idPais, $idIdioma, $disponible, $numPlazas, $nvlRequerido );
 		
+		logToFile("crearDestino.txt", $query);
 		$resultadoquery = mysql_query ( $query, $conexion );
 		if ($resultadoquery) {
 			$retorno->errno = 0;
@@ -176,6 +180,7 @@ function editarDestino($idDestino, $nombre, $idPais, $idIdioma, $disponible, $nu
 			$query = sprintf ( "UPDATE FROM Destino SET nombre='%s' 
 					pais=%d idioma=%d disponible=%d numPlazas=%d nvlRequerido=%d 
 					WHERE id=%d;", mysql_escape_string ( $nombre ), $idPais, $idIdioma, $disponible, $numPlazas, $nvlRequerido, $idDestino );
+			logToFile("editarDestino.txt", $query);
 			$resultadoQuery = mysql_query ( $query, $conexion );
 			if ($resultadoQuery) {
 				$retorno->errno = 0;
@@ -208,6 +213,7 @@ function borrarDestino($idDestino) {
 		$esquema = mysql_select_db ( DB_NAME, $conexion );
 		if ($esquema) {
 			$query = sprintf ( "DELETE FROM Destino WHERE idDestino = %d;", $idDestino );
+			logToFile("borrarDestino.txt", $query);
 			$resultadoQuery = mysql_query ( $query, $conexion );
 			if ($resultadoQuery) {
 				$retorno->errno = 0;
@@ -244,7 +250,7 @@ function aceptarSolicitud($idUsuario, $idDestino) {
 		$bdactual = mysql_select_db ( DB_NAME, $conexion );
 		
 		$query = sprintf ( "UPDATE Solicitud SET aceptado = true WHERE idAl= %d AND idDest = %d;", $idUsuario, $idDestino );
-		
+		logToFile("aceptarSolicitud.txt", $query);
 		$resultadoquery = mysql_query ( $query, $conexion );
 		if ($resultadoquery) {
 			$retorno->errno = 0;
@@ -288,6 +294,7 @@ function consultarSolicitudes($idUsuario, $idDestino) {
 		
 		$query = $query . ";";
 		// Fin de consulta SQL
+		logToFile("consultarSolicitudes.txt", $query);
 		
 		$resultadoquery = mysql_query ( $query, $conexion );
 		if ($resultadoquery) {
@@ -339,7 +346,7 @@ function consultarAsignaturasMatriculadas($idAlumno) {
 		// Armando la consulta SQL
 		$query = sprintf ( "SELECT asig.nombre AS nombre, t.nombre AS titulacion, asig.creditos AS creditos, c.nombre AS coordinador" . " FROM (((Asignatura asig INNER JOIN Usuario c ON c.id = asig.coordinador)" . " INNER JOIN Titulacion t ON t.id = asig.titulacion)" . " INNER JOIN Matricula m ON m.asignatura = asig.id)" . " INNER JOIN Usuario al ON al.id = m.id" . " WHERE al.id = %d;", $idAlumno );
 		// Fin de consulta SQL
-		
+		logToFile("consultarAsignaturasMatriculadas.txt", $query);
 		$resultadoquery = mysql_query ( $query, $conexion );
 		if ($resultadoquery) {
 			$retorno->errno = 0;
@@ -387,7 +394,7 @@ function consultarExtrangerasAlumno($idAlumno) {
 		// Armando la consulta SQL
 		$query = sprintf ( "SELECT aex.nombre AS nombre, aex.creditos AS creditos, des.nombre AS centro" . " FROM (((((Asignatura asig INNER JOIN Titulacion t ON t.id = asig.titulacion)" . " INNER JOIN Matricula m ON m.asignatura = asig.id)" . " INNER JOIN Usuario al ON al.id = m.id)" . " INNER JOIN Convalidacion co ON co.asignatura = asig.id)" . " INNER JOIN AsignaturaExt aex ON co.AsignaturaExt aex.id)" . " INNER JOIN Destino des ON des.id = aex.centro" . " WHERE al.id = %d;", mysql_escape_string ( $idAlumno ) );
 		// Fin de consulta SQL
-		
+		logToFile("consultarExtrangerasAlumno.txt", $query);
 		$resultadoquery = mysql_query ( $query, $conexion );
 		if ($resultadoquery) {
 			$retorno->errno = 0;
@@ -440,7 +447,7 @@ function loginUsuario($nick, $passwd) {
 		// Armando la consulta SQL
 		$query = sprintf ( "SELECT *" . " FROM Usuario" . " WHERE nick = '%s' AND passwd = '%s';", mysql_escape_string ( $nick ), mysql_escape_string ( $passwd ) );
 		// Fin de consulta SQL
-		
+		logToFile("loginUsuario.txt", $query);
 		$resultadoquery = mysql_query ( $query, $conexion );
 		if ($resultadoquery) {
 			if (mysql_num_rows ( $resultadoquery ) == 1) {
