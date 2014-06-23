@@ -133,7 +133,7 @@ function crearDestino($nombre, $idPais, $idIdioma, $disponible, $numPlazas, $nvl
 	if ($conexion) {
 		$bdactual = mysql_select_db ( DB_NAME, $conexion );
 		
-		$query = sprintf ( "INSERT INTO Destino('nombre', 'pais', 'idioma', 'disponible', 'numplazas', 'nvlrequerido')" . " VALUES('%s',%d,%d,%d,%d,%d);", mysql_escape_string ( $nombre ), $idPais, $idIdioma, $disponible, $numPlazas, $nvlRequerido );
+		$query = sprintf ( "INSERT INTO Destino(nombre, pais, idioma, disponible, numplazas, nvlrequerido)" . " VALUES('%s',%d,%d,%d,%d,%d);", mysql_escape_string ( $nombre ), $idPais, $idIdioma, $disponible, $numPlazas, $nvlRequerido );
 		
 		logToFile("crearDestino.txt", $query);
 		$resultadoquery = mysql_query ( $query, $conexion );
