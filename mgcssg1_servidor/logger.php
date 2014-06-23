@@ -6,6 +6,8 @@ function logToFile($file, $text){
 	$fichero = fopen($path, "a+w");
 	
 	$log = $date . ": " . $text . "\r\n";
+	$fwrite($log);
+	$fclose($fichero);
 }
 
 ?>
