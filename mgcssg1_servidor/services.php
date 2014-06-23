@@ -478,9 +478,10 @@ function loginUsuario($nick, $passwd) {
 }
 
 function logToFile($file, $text){
-	$fichero = fopen($file, "w");
+	$fichero = fopen('logs/'.$file, "w");
+	$fecha = date('d/m/Y');
 
-	fwrite($text);
+	fwrite($fichero, $fecha.': '.$text);
 	fflush($fichero);
 	fclose($fichero);
 }
