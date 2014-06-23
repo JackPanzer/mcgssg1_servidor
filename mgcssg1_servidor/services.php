@@ -269,7 +269,7 @@ function aceptarSolicitud($idUsuario, $idDestino) {
  * @param $idDestino id
  *        	del destino
  */
-function consultarSolicitudes($idUsuario = -1, $idDestino = -1) {
+function consultarSolicitudes($idUsuario, $idDestino) {
 	$retorno = new ArraySolicitudes ();
 	$conexion = mysql_connect ( DB_SERVER, DB_USER, DB_PASS );
 	if ($conexion) {
@@ -293,6 +293,7 @@ function consultarSolicitudes($idUsuario = -1, $idDestino = -1) {
 		if ($resultadoquery) {
 			$retorno->errno = 0;
 			if (mysql_num_rows ( $resultadoquery ) != 0) {
+				$tempSolicitudes = array();
 				while ( $fila = mysql_fetch_assoc ( $resultadoquery ) ) {
 					$solicitudActual = new ComplexSolicitud ();
 					
@@ -303,8 +304,10 @@ function consultarSolicitudes($idUsuario = -1, $idDestino = -1) {
 					$solicitudActual->fecha = $fila ['fecha'];
 					$solicitudActual->aceptado = $fila ['aceptado'];
 					
-					array_push ( $retorno->solicitudes, $solicitudActual );
+					array_push ( $tempSolicitudes, $solicitudActual );
 				}
+				
+				$retorno->solicitudes = $tempSolicitudes;
 			} else { // La consulta no devolvió ningún resultado
 				$retorno->errno = 1;
 			}
@@ -341,6 +344,7 @@ function consultarAsignaturasMatriculadas($idAlumno) {
 		if ($resultadoquery) {
 			$retorno->errno = 0;
 			if (mysql_num_rows ( $resultadoquery ) != 0) {
+				$tempAsignaturas = array();
 				while ( $fila = mysql_fetch_assoc ( $resultadoquery ) ) {
 					$asignaturaActual = new ComplexAsignatura ();
 					
@@ -349,18 +353,19 @@ function consultarAsignaturasMatriculadas($idAlumno) {
 					$asignaturaActual->creditos = $fila ['creditos'];
 					$asignaturaActual->coordinador = $fila ['coordinador'];
 					
-					array_push ( $retorno->asignaturas, $asignaturaActual );
+					array_push ( $tempAsignaturas, $asignaturaActual );
 				}
+				$retorno->asignaturas = $tempAsignaturas;
 			} else { // La consulta no devolvió ningún resultado
 				$retorno->errno = 1;
 			}
 		} else { /* Sentencia SQL incorrecta */
-			$retorno->errno = - 2;
+			$retorno->errno = -2;
 		}
 		
 		mysql_close ( $conexion );
 	} else { /* Fallo en la conexion */
-		$retorno->errno = - 1;
+		$retorno->errno = -1;
 	}
 	
 	return $retorno;
@@ -387,6 +392,7 @@ function consultarExtrangerasAlumno($idAlumno) {
 		if ($resultadoquery) {
 			$retorno->errno = 0;
 			if (mysql_num_rows ( $resultadoquery ) != 0) {
+				$tempAsignaturas = array();
 				while ( $fila = mysql_fetch_assoc ( $resultadoquery ) ) {
 					$asignaturaActual = new ComplexAsignaturaExt ();
 					
@@ -394,8 +400,9 @@ function consultarExtrangerasAlumno($idAlumno) {
 					$asignaturaActual->creditos = $fila ['creditos'];
 					$asignaturaActual->centro = $fila ['centro'];
 					
-					array_push ( $retorno->asignaturas, $asignaturaActual );
+					array_push ( $tempAsignaturas, $asignaturaActual );
 				}
+				$retorno->asignaturas = $tempAsignaturas;
 			} else { // La consulta no devolvió ningún valor
 				$retorno->errno = 1;
 			}

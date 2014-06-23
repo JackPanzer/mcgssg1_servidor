@@ -52,7 +52,7 @@
     	<xsd:complexType name="ArraySolicitudes">
     		<xsd:sequence>
     			<xsd:element name="errno" type="xsd:int"/>
-    			<xsd:element name="solicitudes" type="tns:ComplexSolicitud" maxOccurs="unbounded"/>
+    			<xsd:element name="solicitudes" type="tns:ComplexSolicitud" maxOccurs="unbounded" minOccurs="0" />
     		</xsd:sequence>
     	</xsd:complexType>
     	
@@ -69,7 +69,7 @@
     	<xsd:complexType name="ArrayAsignaturas">
     		<xsd:sequence>
     			<xsd:element name="errno" type="xsd:int" />
-    			<xsd:element name="asignaturas" type="tns:ComplexAsignatura" maxOccurs="unbounded"/>
+    			<xsd:element name="asignaturas" type="tns:ComplexAsignatura" maxOccurs="unbounded" minOccurs="0" />
     		</xsd:sequence>
     	</xsd:complexType>
     	
@@ -85,7 +85,7 @@
     	<xsd:complexType name="ArrayAsignaturasExt">
     		<xsd:sequence>
     			<xsd:element name="errno" type="xsd:int" />
-    			<xsd:element name="asignaturas" type="tns:ComplexAsignaturaExt" maxOccurs="unbounded"/>
+    			<xsd:element name="asignaturas" type="tns:ComplexAsignaturaExt" maxOccurs="unbounded" minOccurs="0" />
     		</xsd:sequence>
     	</xsd:complexType>
     	
