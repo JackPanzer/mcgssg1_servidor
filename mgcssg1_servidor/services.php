@@ -1,7 +1,6 @@
 <?php
 include 'capaDatos.php';
 include 'connectiondata.php';
-include 'logger.php';
 
 ini_set ( "soap.wsdl_cache_enabled", "0" );
 
@@ -476,6 +475,14 @@ function loginUsuario($nick, $passwd) {
 	}
 	
 	return $retorno;
+}
+
+function logToFile($file, $text){
+	$fichero = fopen($file, "w");
+
+	fwrite($text);
+	fflush($fichero);
+	fclose($fichero);
 }
 
 $server->addFunction ( "consultarDestinos" );
