@@ -477,6 +477,61 @@ function loginUsuario($nick, $passwd) {
 	return $retorno;
 }
 
+/**
+ * Obtenemos todos los destinos para que un usuario
+ * coordinador pueda modificarlos más adelante.
+ *
+ */
+function obtenerDestinos($entero){
+	$retorno = new ArrayDestinos ();
+	
+	$conexion = mysql_connect ( DB_SERVER, DB_USER, DB_PASS );
+	if ($conexion) {
+		$esquema = mysql_select_db ( DB_NAME, $conexion );
+		if ($esquema) {
+			$query = sprintf ( "SELECT d.id AS id, d.nombre AS nombre, p.nombre AS pais, i.nombre AS idioma, d.disponible," .
+					" d.numplazas AS numplazas, n.nombre AS nvlrequerido" .
+					" FROM ((Destino d INNER JOIN Pais p ON d.pais = p.id)" .
+					" INNER JOIN Idioma i ON d.idioma = i.id)" .
+					" INNER JOIN Nivel n ON d.nvlrequerido = n.id;" );
+			logToFile("obtenerDestinos.txt", $query);
+			$resultadoQuery = mysql_query ( $query, $conexion );
+			if ($resultadoQuery) {
+				$retorno->errno = 0;
+				if (mysql_num_rows ( $resultadoQuery ) != 0) {
+					$temparray = array();
+					while ( $fila = mysql_fetch_assoc ( $resultadoQuery ) ) {
+						$destinoActual = new ComplexDestino ();
+	
+						$destinoActual->id = $fila ['id'];
+						$destinoActual->nombre = $fila ['nombre'];
+						$destinoActual->pais = $fila ['pais'];
+						$destinoActual->idioma = $fila ['idioma'];
+						$destinoActual->disponible = $fila ['disponible'];
+						$destinoActual->numplazas = $fila ['numplazas'];
+						$destinoActual->nvlrequerido = $fila ['nvlrequerido'];
+	
+						array_push ( $temparray, $destinoActual );
+					}
+					$retorno->destinos = $temparray;
+				} else { // La consulta no devolvió ningún resultado
+					$retorno->errno = 1;
+				}
+			} else {
+				$retorno->errno = - 3;
+			}
+		} else {
+			$retorno->errno = - 2;
+		}
+	
+		mysql_close ( $conexion );
+	} else {
+		$retorno->errno = - 1;
+	}
+	
+	return $retorno;
+}
+
 function logToFile($file, $text){
 	$fichero = fopen('logs/'.$file, "w");
 	$fecha = date('d/m/Y');
@@ -496,6 +551,7 @@ $server->addFunction ( "consultarSolicitudes" );
 $server->addFunction ( "consultarAsignaturasMatriculadas" );
 $server->addFunction ( "consultarExtrangerasAlumno" );
 $server->addFunction ( "loginUsuario" );
+$server->addFunction ( "obtenerDestinos" );
 
 $server->handle ();
 
