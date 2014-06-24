@@ -533,10 +533,10 @@ function obtenerDestinos($entero){
 }
 
 function logToFile($file, $text){
-	$fichero = fopen('logs/'.$file, "w");
-	$fecha = date('d/m/Y');
+	$fichero = fopen('logs/'.$file, "a");
+	$fecha = date('d/m/Y H:i:s');
 
-	fwrite($fichero, $fecha.': '.$text);
+	fwrite($fichero, $fecha.' -> '.$text. "\r\n");
 	fflush($fichero);
 	fclose($fichero);
 }
