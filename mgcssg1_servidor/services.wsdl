@@ -23,10 +23,13 @@
     			<xsd:element name="id" type="xsd:int"/>
     			<xsd:element name="nombre" type="xsd:string"/>
     			<xsd:element name="pais" type="xsd:string"/>
+    			<xsd:element name="idpais" type="xsd:int" />
     			<xsd:element name="idioma" type="xsd:string"/>
+    			<xsd:element name="id_idioma" type="xsd:int"/>
     			<xsd:element name="disponible" type="xsd:boolean"/>
     			<xsd:element name="numplazas" type="xsd:int"/>
     			<xsd:element name="nvlrequerido" type="xsd:string"/>
+    			<xsd:element name="idnvlrequerido" type="xsd:string"/>
     		</xsd:sequence>
     	</xsd:complexType>
     	

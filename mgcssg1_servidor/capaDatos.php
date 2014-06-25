@@ -34,10 +34,13 @@ class ComplexDestino{
 	public $id;
 	public $nombre;
 	public $pais;
+	public $idpais;
 	public $idioma;
+	public $id_idioma;
 	public $disponible;
 	public $numplazas;
 	public $nvlrequerido;
+	public $idnvlrequerido;
 	
 	public function ComplexDestino(){
 		$errno = 0;

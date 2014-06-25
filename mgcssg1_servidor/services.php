@@ -21,8 +21,9 @@ function consultarDestinos($idAlumno) {
 	if ($conexion) {
 		$esquema = mysql_select_db ( DB_NAME, $conexion );
 		if ($esquema) {
-			$query = sprintf ( "SELECT d.id AS id, d.nombre AS nombre, p.nombre AS pais, i.nombre AS idioma, d.disponible," . 
-								" d.numplazas AS numplazas, n.nombre AS nvlrequerido" . 
+			$query = sprintf ( "SELECT d.id AS id, d.nombre AS nombre, p.nombre AS pais, p.id AS idpais".
+								" i.nombre AS idioma, i.id AS id_idioma, d.disponible," . 
+								" d.numplazas AS numplazas, n.nombre AS nvlrequerido, n.id AS idnvlrequerido" . 
 								" FROM (((((((Usuario u INNER JOIN Matricula m on m.id = u.id)" .
 								" INNER JOIN Asignatura a ON a.id = m.asignatura)" . 
 								" INNER JOIN Convalidacion c ON c.asignatura = a.id)" . 
