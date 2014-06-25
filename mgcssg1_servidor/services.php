@@ -21,7 +21,7 @@ function consultarDestinos($idAlumno) {
 	if ($conexion) {
 		$esquema = mysql_select_db ( DB_NAME, $conexion );
 		if ($esquema) {
-			$query = sprintf ( "SELECT d.id AS id, d.nombre AS nombre, p.nombre AS pais, p.id AS idpais".
+			$query = sprintf ( "SELECT d.id AS id, d.nombre AS nombre, p.nombre AS pais, p.id AS idpais,".
 								" i.nombre AS idioma, i.id AS id_idioma, d.disponible," . 
 								" d.numplazas AS numplazas, n.nombre AS nvlrequerido, n.id AS idnvlrequerido" . 
 								" FROM (((((((Usuario u INNER JOIN Matricula m on m.id = u.id)" .
@@ -45,10 +45,13 @@ function consultarDestinos($idAlumno) {
 						$destinoActual->id = $fila ['id'];
 						$destinoActual->nombre = $fila ['nombre'];
 						$destinoActual->pais = $fila ['pais'];
+						$destinoActual->idpais = $fila ['idpais'];
 						$destinoActual->idioma = $fila ['idioma'];
+						$destinoActual->id_idioma = $fila ['id_idioma'];
 						$destinoActual->disponible = $fila ['disponible'];
 						$destinoActual->numplazas = $fila ['numplazas'];
 						$destinoActual->nvlrequerido = $fila ['nvlrequerido'];
+						$destinoActual->idnvlrequerido = $fila ['idnvlrequerido'];
 						
 						array_push ( $temparray, $destinoActual );
 					}
@@ -490,8 +493,9 @@ function obtenerDestinos($entero){
 	if ($conexion) {
 		$esquema = mysql_select_db ( DB_NAME, $conexion );
 		if ($esquema) {
-			$query = sprintf ( "SELECT d.id AS id, d.nombre AS nombre, p.nombre AS pais, i.nombre AS idioma, d.disponible," .
-					" d.numplazas AS numplazas, n.nombre AS nvlrequerido" .
+			$query = sprintf ( "SELECT d.id AS id, d.nombre AS nombre, p.nombre AS pais, p.id AS idpais,".
+					" i.nombre AS idioma, i.id AS id_idioma, d.disponible," . 
+					" d.numplazas AS numplazas, n.nombre AS nvlrequerido, n.id AS idnvlrequerido" .
 					" FROM ((Destino d INNER JOIN Pais p ON d.pais = p.id)" .
 					" INNER JOIN Idioma i ON d.idioma = i.id)" .
 					" INNER JOIN Nivel n ON d.nvlrequerido = n.id;" );
@@ -507,10 +511,13 @@ function obtenerDestinos($entero){
 						$destinoActual->id = $fila ['id'];
 						$destinoActual->nombre = $fila ['nombre'];
 						$destinoActual->pais = $fila ['pais'];
+						$destinoActual->idpais = $fila ['idpais'];
 						$destinoActual->idioma = $fila ['idioma'];
+						$destinoActual->id_idioma = $fila ['id_idioma'];
 						$destinoActual->disponible = $fila ['disponible'];
 						$destinoActual->numplazas = $fila ['numplazas'];
 						$destinoActual->nvlrequerido = $fila ['nvlrequerido'];
+						$destinoActual->idnvlrequerido = $fila ['idnvlrequerido'];
 	
 						array_push ( $temparray, $destinoActual );
 					}
