@@ -215,7 +215,7 @@ function borrarDestino($idDestino) {
 	if ($conexion) {
 		$esquema = mysql_select_db ( DB_NAME, $conexion );
 		if ($esquema) {
-			$query = sprintf ( "DELETE FROM Destino WHERE idDestino = %d;", $idDestino );
+			$query = sprintf ( "DELETE FROM Destino WHERE id = %d;", $idDestino );
 			logToFile("borrarDestino.txt", $query);
 			$resultadoQuery = mysql_query ( $query, $conexion );
 			if ($resultadoQuery) {
