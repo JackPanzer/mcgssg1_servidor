@@ -180,8 +180,8 @@ function editarDestino($idDestino, $nombre, $idPais, $idIdioma, $disponible, $nu
 	if ($conexion) {
 		$esquema = mysql_select_db ( DB_NAME, $conexion );
 		if ($esquema) {
-			$query = sprintf ( "UPDATE Destino SET nombre='%s' 
-					pais=%d idioma=%d disponible=%d numPlazas=%d nvlRequerido=%d 
+			$query = sprintf ( "UPDATE Destino SET nombre='%s', 
+					pais=%d, idioma=%d, disponible=%d, numPlazas=%d, nvlRequerido=%d 
 					WHERE id=%d;", mysql_escape_string ( $nombre ), $idPais, $idIdioma, $disponible, $numPlazas, $nvlRequerido, $idDestino );
 			logToFile("editarDestino.txt", $query);
 			$resultadoQuery = mysql_query ( $query, $conexion );
