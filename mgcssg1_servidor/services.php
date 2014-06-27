@@ -32,7 +32,7 @@ function consultarDestinos($idAlumno) {
 								" INNER JOIN Pais p ON d.pais = p.id)" . 
 								" INNER JOIN Idioma i ON d.idioma = i.id)" . 
 								" INNER JOIN Nivel n ON d.nvlrequerido = n.id" . 
-								" WHERE u.id = %d AND d.numplazas > 0;", $idAlumno );
+								" WHERE u.id = %d AND d.numplazas > 0 AND d.disponible = true;", $idAlumno );
 			logToFile("consultarDestinos.txt", $query);
 			$resultadoQuery = mysql_query ( $query, $conexion );
 			if ($resultadoQuery) {
