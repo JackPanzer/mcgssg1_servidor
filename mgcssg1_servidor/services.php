@@ -592,6 +592,7 @@ $server->addFunction ( "consultarAsignaturasMatriculadas" );
 $server->addFunction ( "consultarExtrangerasAlumno" );
 $server->addFunction ( "loginUsuario" );
 $server->addFunction ( "obtenerDestinos" );
+$server->addFunction ( "agregarAsignaturaSolicitud" );
 
 $server->handle ();
 
