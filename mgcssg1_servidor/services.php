@@ -540,6 +540,38 @@ function obtenerDestinos($entero){
 	return $retorno;
 }
 
+/**
+ * Agrega una asignatura extrangera a una solicitud de Erasmus
+ * 
+ * @param $idAlumno Id del alumno, clave conjunta
+ * @param $idDestino Id del destino, clave conjunta
+ * @param $idAsignaturaExt Id de la asignatura que se imparte en
+ * 			el extrangero
+ */
+function agregarAsignaturaSolicitud($idAlumno, $idDestino, $idAsignaturaExt){
+	$retorno = new GenericResult ();
+	$conexion = mysql_connect ( DB_SERVER, DB_USER, DB_PASS );
+	if ($conexion) {
+		$bdactual = mysql_select_db ( DB_NAME, $conexion );
+	
+		$query = sprintf ( "INSERT INTO AsigPrecontrato VALUES (%d, %d, %d);", 
+				$idUsuario, $idDestino, $idAsignaturaExt );
+		logToFile("agregarAsignaturaSolicitud.txt", $query);
+		$resultadoquery = mysql_query ( $query, $conexion );
+		if ($resultadoquery) {
+			$retorno->errno = 0;
+		} else { /* Sentencia SQL incorrecta */
+			$retorno->errno = - 2;
+		}
+	
+		mysql_close ( $conexion );
+	} else { /* Fallo en la conexion */
+		$retorno->errno = - 1;
+	}
+	
+	return $retorno;
+}
+
 function logToFile($file, $text){
 	$fichero = fopen('logs/'.$file, "a");
 	$fecha = date('d/m/Y H:i:s');

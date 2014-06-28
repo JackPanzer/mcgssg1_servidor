@@ -108,6 +108,23 @@
     		</xsd:sequence>
     	</xsd:complexType>
     	
+    	<xsd:complexType name="ComplexPrecontrato">
+    		<xsd:sequence>
+    			<xsd:element name="errno" type="xsd:int" />
+    			<xsd:element name="nomAlumno" type="xsd:string" />
+    			<xsd:element name="idAlumno" type="xsd:int" />
+    			<xsd:element name="nomDestino" type="xsd:string" />
+    			<xsd:element name="idDestino" type="xsd:int" />
+    			<xsd:element name="asignaturas" type="tns:ArrayAsignaturasExt" />
+    		</xsd:sequence>
+    	</xsd:complexType>
+    	
+    	<xsd:complexType name="ArrayPrecontrato">
+    		<xsd:sequence>
+    			<xsd:element name="errno" type="xsd:int" />
+    			<xsd:element name="precontratos" type="tns:ComplexPrecontrato" maxOccurs="unbounded" minOccurs="0" />
+    		</xsd:sequence>
+    	</xsd:complexType>
   	</xsd:schema>
   </wsdl:types>
    	
@@ -213,6 +230,16 @@
   <message name="ObtenerDestinosSalida">
     <part name="resultado" type="tns:ArrayDestinos" />
   </message>
+  
+  <message name="AgregarAsignaturaSolicitudEntrada">
+  	<part name="idAlumno" type="xsd:int" />
+  	<part name="idDestino" type="xsd:int" />
+  	<part name="idAsignaturaExt" type="xsd:int" />
+  </message>
+  
+  <message name="AgregarAsignaturaSolicitudSalida">
+    <part name="resultado" type="tns:GenericResult" />
+  </message>
 
   <portType name="ErasmusWSDLPort">
   	<operation name="consultarDestinos">
@@ -268,6 +295,11 @@
   	<operation name="obtenerDestinos">
   		<input message="tns:ObtenerDestinosEntrada" />
   		<output message="tns:ObtenerDestinosSalida" />
+  	</operation>
+  	
+  	<operation name="agregarAsignaturaSolicitud">
+  		<input message="tns:AgregarAsignaturaSolicitudEntrada" />
+  		<output message="tns:AgregarAsignaturaSolicitudSalida" />
   	</operation>
   </portType>
  
@@ -391,6 +423,18 @@
     
     <operation name="obtenerDestinos">
         <soap:operation soapAction="urn:ErasmusWSDL#obtenerDestinos" />
+        <input>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    
+    <operation name="agregarAsignaturaSolicitud">
+        <soap:operation soapAction="urn:ErasmusWSDL#agregarAsignaturaSolicitud" />
         <input>
           <soap:body use="literal" namespace="urn:ErasmusWSDL"
                      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />

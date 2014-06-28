@@ -12,7 +12,7 @@
  *
  */
 class GenericResult{
-	public $errno;
+	public $errno; //int
 	
 	public function GenericResult(){
 		$errno = 0;
@@ -30,17 +30,17 @@ class GenericResult{
  */
 class ComplexDestino{
 	
-	public $errno;
-	public $id;
-	public $nombre;
-	public $pais;
-	public $idpais;
-	public $idioma;
-	public $id_idioma;
-	public $disponible;
-	public $numplazas;
-	public $nvlrequerido;
-	public $idnvlrequerido;
+	public $errno; //int
+	public $id; //int
+	public $nombre; //string
+	public $pais; //string
+	public $idpais; //int
+	public $idioma; //string
+	public $id_idioma; //int
+	public $disponible; //bool
+	public $numplazas; //int
+	public $nvlrequerido; //string
+	public $idnvlrequerido; //int
 	
 	public function ComplexDestino(){
 		$errno = 0;
@@ -54,13 +54,13 @@ class ComplexDestino{
  * 
  */
 class ComplexSolicitud{
-	public $errno;
-	public $nomAlumno;
-	public $idAl;
-	public $nomDestino;
-	public $idDest;
-	public $fecha;
-	public $aceptado;
+	public $errno; //int
+	public $nomAlumno; //string
+	public $idAl; //int
+	public $nomDestino; //string
+	public $idDest; //int
+	public $fecha; //date
+	public $aceptado; //bool
 	
 	public function ComplexSolicitud(){
 		$errno = 0;
@@ -71,8 +71,8 @@ class ComplexSolicitud{
  * Representa una lista de destinos.
  */
 class ArrayDestinos{
-	public $errno;
-	public $destinos;
+	public $errno; //int
+	public $destinos; //Vector<ComplexDestino>
 	
 	public function ArrayDestinos(){
 		$errno = 0;
@@ -84,8 +84,8 @@ class ArrayDestinos{
  * Representa una lista de solicitudes de ERASMUS.
  */
 class ArraySolicitudes{
-	public $errno;
-	public $solicitudes;
+	public $errno; //int
+	public $solicitudes; //Vector<ComplexSolicitud>
 
 	public function ArraySolicitudes(){
 		$errno = 0;
@@ -98,12 +98,14 @@ class ArraySolicitudes{
  * 
  */
 class ComplexAsignatura{
-	public $errno;
+	public $errno; //int
 	
-	public $nombre;
-	public $titulacion;
-	public $creditos;
-	public $coordinador;
+	public $nombre; //string
+	public $titulacion; //string
+	public $creditos; //int
+	public $coordinador; //int
+	
+	public $asignaturas; //ArrayAsignaturaExt
 	
 	public function ComplexAsignatura(){
 		$errno = 0;
@@ -115,9 +117,9 @@ class ComplexAsignatura{
  * 
  */
 class ArrayAsignaturas{
-	public $errno;
+	public $errno; //int
 	
-	public $asignaturas;
+	public $asignaturas; //Vector<ComplexAsignatura>
 	
 	public function ArrayAsignatura(){
 		$errno = 0;
@@ -130,11 +132,11 @@ class ArrayAsignaturas{
  *
  */
 class ComplexAsignaturaExt{
-	public $errno;
+	public $errno; //int
 
-	public $nombre;
-	public $creditos;
-	public $centro;
+	public $nombre; //string
+	public $creditos; //int
+	public $centro; //int
 
 	public function ComplexAsignaturaExt(){
 		$errno = 0;
@@ -146,9 +148,9 @@ class ComplexAsignaturaExt{
  *
  */
 class ArrayAsignaturasExt{
-	public $errno;
+	public $errno; //int
 
-	public $asignaturas;
+	public $asignaturas; //Vector<ComplexAsignaturaExt>
 
 	public function ArrayAsignaturaExt(){
 		$errno = 0;
@@ -161,22 +163,55 @@ class ArrayAsignaturasExt{
  *
  */
 class ComplexUsuario {
-	public $errno;
+	public $errno; //int
 	
-	public $id;
-	public $nombre;
-	public $apellidos;
-	public $nif;
-	public $rol;
-	public $direccion;
-	public $poblacion;
-	public $nick;
-	public $passwd;
-	public $titulacion;
+	public $id; //int
+	public $nombre; //string
+	public $apellidos; //string
+	public $nif; //string
+	public $rol; //int
+	public $direccion; //string
+	public $poblacion; //string
+	public $nick; //string
+	public $passwd; //string
+	public $titulacion; //int
 	
 	public function ComplexUsuario(){
 		$errno = 0;
 	}
 }
 
+/**
+ * Representa un precontrato
+ * 
+ */
+class ComplexPrecontrato {
+	public $errno; //int
+	
+	public $nomAlumno; //string
+	public $idAlumno; //int
+	
+	public $nomDestino; //string
+	public $idDestino; //int
+	
+	public function ComplexPrecontrato(){
+		$errno = 0;
+	}
+}
+
+/**
+ * Representa una lista de precontratos
+ * 
+ */
+
+class ArrayPrecontratos {
+	public $errno; //int
+	
+	public $precontratos; //Vector<ComplexPrecontrato>
+	
+	public function ArrayPrecontratos(){
+		$errno = 0;
+		$precontratos = array();
+	}
+}
 ?>
