@@ -147,6 +147,15 @@
   	<part name="retorno" type="tns:GenericResult" />
   </message>
   
+  <message name="BorrarSolicitudEntrada">
+  	<part name="idAlumno" type="xsd:int" />
+  	<part name="idDestino" type="xsd:int" />
+  </message>
+  
+  <message name="BorrarSolicitudSalida">
+  	<part name="retorno" type="tns:GenericResult" />
+  </message>
+  
   <message name="CrearDestinoEntrada">
   	<part name="nombre" type="xsd:string" />
   	<part name="idPais" type="xsd:int" />
@@ -272,6 +281,11 @@
   		<output message="tns:CrearSolicitudSalida" />
   	</operation>
   	
+  	<operation name="borrarSolicitud">
+  		<input message="tns:BorrarSolicitudEntrada" />
+  		<output message="tns:BorrarSolicitudSalida" />
+  	</operation>
+  	
   	<operation name="crearDestino">
   		<input message="tns:CrearDestinoEntrada" />
   		<output message="tns:CrearDestinoSalida" />
@@ -348,6 +362,17 @@
     </operation>
     <operation name="crearSolicitud">
         <soap:operation soapAction="urn:ErasmusWSDL#crearSolicitud" />
+        <input>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    <operation name="borrarSolicitud">
+        <soap:operation soapAction="urn:ErasmusWSDL#borrarSolicitud" />
         <input>
           <soap:body use="literal" namespace="urn:ErasmusWSDL"
                      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
