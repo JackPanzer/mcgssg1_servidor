@@ -549,7 +549,7 @@ function obtenerDestinos($entero){
  * 			el extrangero
  */
 function agregarAsignaturaSolicitud($idAlumno, $idDestino, $idAsignaturaExt){
-	$retorno = new GenericResult ();
+	$retorno = new ArrayAsignaturasExt();
 	$conexion = mysql_connect ( DB_SERVER, DB_USER, DB_PASS );
 	if ($conexion) {
 		$bdactual = mysql_select_db ( DB_NAME, $conexion );
@@ -557,6 +557,93 @@ function agregarAsignaturaSolicitud($idAlumno, $idDestino, $idAsignaturaExt){
 		$query = sprintf ( "INSERT INTO AsigPrecontrato VALUES (%d, %d, %d);", 
 				$idUsuario, $idDestino, $idAsignaturaExt );
 		logToFile("agregarAsignaturaSolicitud.txt", $query);
+		$resultadoquery = mysql_query ( $query, $conexion );
+		if ($resultadoquery) {
+			$retorno->errno = 0;
+			if (mysql_num_rows ( $resultadoQuery ) != 0) {
+				$temparray = array ();
+				while ( $fila = mysql_fetch_assoc ( $resultadoQuery ) ) {
+					$asignaturaActual = new ComplexDestino ();
+					
+					$asignaturaActual->id = $fila ['id'];
+					$asignaturaActual->nombre = $fila ['nombre'];
+					$asignaturaActual->idioma = $fila ['creditos'];
+					$asignaturaActual->pais = $fila ['centro'];
+					$asignaturaActual->idpais = $fila ['idcentro'];
+					
+					array_push ( $temparray, $asignaturaActual );
+				}
+				$retorno->asignaturas = $temparray;
+			} else { // La consulta no devolvió ningún resultado
+				$retorno->errno = 1;
+			}
+		} else { /* Sentencia SQL incorrecta */
+			$retorno->errno = - 2;
+		}
+	
+		mysql_close ( $conexion );
+	} else { /* Fallo en la conexion */
+		$retorno->errno = - 1;
+	}
+	
+	return $retorno;
+}
+
+/**
+ * Devuelve las asignaturas extrangeras para una solicitud
+ * 
+ * @param $idAlumno Id del alumno
+ * @param $idDestino Id del destino
+ */
+function obtenerAsignaturasSolicitud($idAlumno, $idDestino){
+	$retorno = new ArrayAsignaturasExt();
+	$conexion = mysql_connect ( DB_SERVER, DB_USER, DB_PASS );
+	if ($conexion) {
+		$bdactual = mysql_select_db ( DB_NAME, $conexion );
+	
+		$query = sprintf ( "SELECT aex.id AS id, aex.nombre AS nombre, aex.creditos AS creditos, d.nombre AS centro, aex.centro AS idcentro
+							FROM (AsigPrecontrato pre INNER JOIN AsignaturaExt aex ON aex.id = pre.asignaturaex)
+							INNER JOIN Destino d ON aex.centro = d.id
+							WHERE pre.idAlumno = %d AND pre.idDestino = %d;",
+				$idUsuario, $idDestino, $idAsignaturaExt );
+		logToFile("obtenerAsignaturasSolicitud.txt", $query);
+		$resultadoquery = mysql_query ( $query, $conexion );
+		if ($resultadoquery) {
+			$retorno->errno = 0;
+		} else { /* Sentencia SQL incorrecta */
+			$retorno->errno = - 2;
+		}
+	
+		mysql_close ( $conexion );
+	} else { /* Fallo en la conexion */
+		$retorno->errno = - 1;
+	}
+	
+	return $retorno;
+}
+
+/**
+ * Obtiene la lista de asignaturas a las que un alumno puede optar
+ * a un destino en base a sus asignaturas matriculadas
+ * 
+ * @param $idAlumno Id del alumno
+ * @param $idDestino Id del destino
+ */
+function obtenerAsignaturasSolicitables($idAlumno, $idDestino){
+	$retorno = new ArrayAsignaturasExt();
+	$conexion = mysql_connect ( DB_SERVER, DB_USER, DB_PASS );
+	if ($conexion) {
+		$bdactual = mysql_select_db ( DB_NAME, $conexion );
+	
+		$query = sprintf ( "SELECT aex.id AS id, aex.nombre AS nombre, aex.creditos AS creditos, d.nombre AS centro, aex.centro AS idcentro
+							FROM ((((Usuario usu INNER JOIN Matricula mat ON usu.id = mat.usuario)
+							INNER JOIN Asignatura asig ON asig.id = mat.asignatura)
+							INNER JOIN Convalidacion conv ON asig.id = conv.asignatura)
+							INNER JOIN AsignaturaExt aex ON aex.id = conv.asignaturaext)
+							INNER JOIN Destino d ON aex.centro = d.id
+							WHERE usu.id = %d AND d.centro = %d;",
+				$idUsuario, $idDestino);
+		logToFile("obtenerAsignaturasSolicitables.txt", $query);
 		$resultadoquery = mysql_query ( $query, $conexion );
 		if ($resultadoquery) {
 			$retorno->errno = 0;
@@ -593,6 +680,7 @@ $server->addFunction ( "consultarExtrangerasAlumno" );
 $server->addFunction ( "loginUsuario" );
 $server->addFunction ( "obtenerDestinos" );
 $server->addFunction ( "agregarAsignaturaSolicitud" );
+$server->addFunction ( "obtenerAsignaturasSolicitud ");
 
 $server->handle ();
 

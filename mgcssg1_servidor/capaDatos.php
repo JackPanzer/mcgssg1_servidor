@@ -134,9 +134,11 @@ class ArrayAsignaturas{
 class ComplexAsignaturaExt{
 	public $errno; //int
 
+	public $id; //int
 	public $nombre; //string
 	public $creditos; //int
-	public $centro; //int
+	public $centro; //string
+	public $idcentro; //int
 
 	public function ComplexAsignaturaExt(){
 		$errno = 0;
