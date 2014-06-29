@@ -112,6 +112,42 @@ function crearSolicitud($idAlumno, $idDestino) {
 }
 
 /**
+ * Elimina solicitud para el Usuario alumno y Destino indicado.
+ *
+ * @param $idAlumno Alumno
+ *        	solicitante
+ * @param
+ *        	$idDestino
+ */
+function borrarSolicitud($idAlumno, $idDestino){
+	$retorno = new GenericResult ();
+	
+	$conexion = mysql_connect ( DB_SERVER, DB_USER, DB_PASS );
+	if ($conexion) {
+		$esquema = mysql_select_db ( DB_NAME, $conexion );
+		if ($esquema) {
+			$query = sprintf ( "DELETE FROM Solicitud WHERE usuario = %d AND destino = %d;", 
+					$idAlumno, $idDestino );
+			logToFile("borrarSolicitud.txt", $query);
+			$resultadoQuery = mysql_query ( $query, $conexion );
+			if ($resultadoQuery) {
+				$retorno->errno = 0;
+			} else {
+				$retorno->errno = - 3;
+			}
+		} else {
+			$retorno->errno = - 2;
+		}
+	
+		mysql_close ( $conexion );
+	} else {
+		$retorno->errno = - 1;
+	}
+	
+	return $retorno;
+}
+
+/**
  * Insertar un nuevo destino dados sus datos
  *
  * PRECONDICIONES: La tabla de destinos, al igual que el resto de tablas
@@ -285,7 +321,7 @@ function consultarSolicitudes($idUsuario, $idDestino) {
 		$bdactual = mysql_select_db ( DB_NAME, $conexion );
 		
 		// Armando la consulta SQL
-		$query = "SELECT u.nombre AS nomAlumno, s.idAl AS idAl, d.nombre AS nomDestino, s.idDest AS idDest, d.fecha AS fecha, d.aceptado AS aceptado" . " FROM (Usuario u INNER JOIN Solicitud s ON u.id = s.idAl)" . " INNER JOIN Destino d ON d.id = s.idDest";
+		$query = "SELECT u.nombre AS nomAlumno, s.idAl AS idAl, d.nombre AS nomDestino, s.idDest AS idDest, s.fecha AS fecha, s.aceptado AS aceptado" . " FROM (Usuario u INNER JOIN Solicitud s ON u.id = s.idAl)" . " INNER JOIN Destino d ON d.id = s.idDest";
 		
 		if (($idUsuario != - 1) && ($idDestino != - 1)) {
 			$query = $query . sprintf ( " WHERE s.idAl = %d", $idUsuario ) . sprintf ( " AND s.idDest = %d", $idDestino );
@@ -670,6 +706,7 @@ function logToFile($file, $text){
 
 $server->addFunction ( "consultarDestinos" );
 $server->addFunction ( "crearSolicitud" );
+$server->addFunction ( "borrarSolicitud" );
 $server->addFunction ( "crearDestino" );
 $server->addFunction ( "editarDestino" );
 $server->addFunction ( "borrarDestino" );
