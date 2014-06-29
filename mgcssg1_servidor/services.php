@@ -343,7 +343,7 @@ function consultarSolicitudes($idUsuario, $idDestino) {
 				while ( $fila = mysql_fetch_assoc ( $resultadoquery ) ) {
 					$solicitudActual = new ComplexSolicitud ();
 					
-					$solicitudActual->nomAlumno = $fila ['nombre'];
+					$solicitudActual->nomAlumno = $fila ['nomAlumno'];
 					$solicitudActual->idAl = $fila ['idAl'];
 					$solicitudActual->nomDestino = $fila ['nomDestino'];
 					$solicitudActual->idDest = $fila ['idDest'];
