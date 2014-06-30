@@ -712,6 +712,53 @@ function obtenerAsignaturasSolicitables($idAlumno, $idDestino){
 	return $retorno;
 }
 
+function obtenerPrecontratos($idAlumno){
+	
+	$retorno = new ArraySolicitudes ();
+	$conexion = mysql_connect ( DB_SERVER, DB_USER, DB_PASS );
+	if ($conexion) {
+		$bdactual = mysql_select_db ( DB_NAME, $conexion );
+		
+		// Armando la consulta SQL
+		$query = "SELECT u.nombre AS nomAlumno, s.idAl AS idAl, d.nombre AS nomDestino, s.idDest AS idDest, s.fecha AS fecha, s.aceptado AS aceptado" . " FROM (Usuario u INNER JOIN Solicitud s ON u.id = s.idAl)" . " INNER JOIN Destino d ON d.id = s.idDest WHERE s.aceptado=false;";
+		// Fin de consulta SQL
+		logToFile("obtenerPrecontratos.txt", $query);
+		
+		$resultadoquery = mysql_query ( $query, $conexion );
+		
+		if ($resultadoquery) {
+			$retorno->errno = 0;
+			if (mysql_num_rows ( $resultadoquery ) != 0) {
+				$tempSolicitudes = array();
+				while ( $fila = mysql_fetch_assoc ( $resultadoquery ) ) {
+					$solicitudActual = new ComplexSolicitud ();
+						
+					$solicitudActual->nomAlumno = $fila ['nomAlumno'];
+					$solicitudActual->idAl = $fila ['idAl'];
+					$solicitudActual->nomDestino = $fila ['nomDestino'];
+					$solicitudActual->idDest = $fila ['idDest'];
+					$solicitudActual->fecha = $fila ['fecha'];
+					$solicitudActual->aceptado = $fila ['aceptado'];
+						
+					array_push ( $tempSolicitudes, $solicitudActual );
+				}
+		
+				$retorno->solicitudes = $tempSolicitudes;
+			} else { // La consulta no devolvió ningún resultado
+				$retorno->errno = 1;
+			}
+		} else { /* Sentencia SQL incorrecta */
+			$retorno->errno = - 2;
+		}
+		
+		mysql_close ( $conexion );
+	}else { /* Fallo en la conexion */
+		$retorno->errno = - 1;
+	}
+	
+	return $retorno;
+}
+
 function logToFile($file, $text){
 	$fichero = fopen('logs/'.$file, "a");
 	$fecha = date('d/m/Y H:i:s');
@@ -735,6 +782,7 @@ $server->addFunction ( "loginUsuario" );
 $server->addFunction ( "obtenerDestinos" );
 $server->addFunction ( "agregarAsignaturasSolicitud" );
 $server->addFunction ( "obtenerAsignaturasSolicitables" );
+$server->addFunction ( "obtenerPrecontratos" );
 
 $server->handle ();
 
