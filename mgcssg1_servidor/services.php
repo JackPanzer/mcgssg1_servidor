@@ -591,13 +591,18 @@ function agregarAsignaturaSolicitud($idAlumno, $idDestino, $idAsignaturaExt){
 		$bdactual = mysql_select_db ( DB_NAME, $conexion );
 	
 		$query = sprintf ( "INSERT INTO AsigPrecontrato VALUES (%d, %d, %d);", 
-				$idUsuario, $idDestino, $idAsignaturaExt );
+				$idAlumno, $idDestino, $idAsignaturaExt );
 		logToFile("agregarAsignaturaSolicitud.txt", $query);
-		$resultadoquery = mysql_query ( $query, $conexion );
-		if ($resultadoquery) {
-			$retorno->errno = 0;
-		} else { /* Sentencia SQL incorrecta */
-			$retorno->errno = - 2;
+		try{
+			$resultadoquery = mysql_query ( $query, $conexion );
+			if ($resultadoquery) {
+				$retorno->errno = 0;
+			} else { /* Sentencia SQL incorrecta */
+				$retorno->errno = - 2;
+			}
+		} 
+		catch (Exception $msqle){ //Violación de integridad
+			$retorno->errno = 2;
 		}
 	
 		mysql_close ( $conexion );
@@ -712,15 +717,31 @@ function obtenerAsignaturasSolicitables($idAlumno, $idDestino){
 	return $retorno;
 }
 
+/**
+ * Obtiene una lista de precontratos en base a la representación
+ * que tiene en el cliente a implementar
+ * 
+ * @param $idAlumno No se utiliza
+ * @return ArrayPrecontratos Lista de precontratos
+ */
 function obtenerPrecontratos($idAlumno){
+	/**
+	 * Esta función va en dos partes: la primera es obtener todas las
+	 * solicitudes a precontrato, la segunda es armar todas las asignaturas
+	 * a enviar
+	 */
 	
-	$retorno = new ArraySolicitudes ();
+	$retorno = new ArrayPrecontratos ();
 	$conexion = mysql_connect ( DB_SERVER, DB_USER, DB_PASS );
 	if ($conexion) {
 		$bdactual = mysql_select_db ( DB_NAME, $conexion );
-		
+		// Primera parte
 		// Armando la consulta SQL
-		$query = "SELECT u.nombre AS nomAlumno, s.idAl AS idAl, d.nombre AS nomDestino, s.idDest AS idDest, s.fecha AS fecha, s.aceptado AS aceptado" . " FROM (Usuario u INNER JOIN Solicitud s ON u.id = s.idAl)" . " INNER JOIN Destino d ON d.id = s.idDest WHERE s.aceptado=false;";
+		$query = "SELECT u.nombre AS nomAlumno, s.idAl AS idAlalumno, u.telefono AS telefono," .
+				 " d.nombre AS nomDestino, s.idDest AS idDestino," . 
+				 " tit.nombre AS titulacion" . 
+				 " FROM (Usuario u INNER JOIN Solicitud s ON u.id = s.idAl)" . 
+			 	 " INNER JOIN Destino d ON d.id = s.idDest WHERE s.aceptado=false;";
 		// Fin de consulta SQL
 		logToFile("obtenerPrecontratos.txt", $query);
 		
@@ -729,21 +750,24 @@ function obtenerPrecontratos($idAlumno){
 		if ($resultadoquery) {
 			$retorno->errno = 0;
 			if (mysql_num_rows ( $resultadoquery ) != 0) {
-				$tempSolicitudes = array();
+				$tempPrecontrato = array();
 				while ( $fila = mysql_fetch_assoc ( $resultadoquery ) ) {
-					$solicitudActual = new ComplexSolicitud ();
-						
+					$solicitudActual = new ComplexPrecontrato ();
+					
 					$solicitudActual->nomAlumno = $fila ['nomAlumno'];
-					$solicitudActual->idAl = $fila ['idAl'];
+					$solicitudActual->idAlumno = $fila ['idAlumno'];
 					$solicitudActual->nomDestino = $fila ['nomDestino'];
-					$solicitudActual->idDest = $fila ['idDest'];
-					$solicitudActual->fecha = $fila ['fecha'];
-					$solicitudActual->aceptado = $fila ['aceptado'];
+					$solicitudActual->idDest = $fila ['idDestino'];
+
+					$solicitudActual->telefono = $fila ['telefono'];
+					$solicitudActual->nvlAlumno = $fila ['nvlAlumno'];
+					$solicitudActual->titulacion = $fila ['titulacion'];
+					
 						
-					array_push ( $tempSolicitudes, $solicitudActual );
+					array_push ( $tempPrecontrato, $solicitudActual );
 				}
 		
-				$retorno->solicitudes = $tempSolicitudes;
+				$retorno->precontratos = $tempPrecontrato;
 			} else { // La consulta no devolvió ningún resultado
 				$retorno->errno = 1;
 			}
@@ -780,7 +804,7 @@ $server->addFunction ( "consultarAsignaturasMatriculadas" );
 $server->addFunction ( "consultarExtrangerasAlumno" );
 $server->addFunction ( "loginUsuario" );
 $server->addFunction ( "obtenerDestinos" );
-$server->addFunction ( "agregarAsignaturasSolicitud" );
+$server->addFunction ( "agregarAsignaturaSolicitud" );
 $server->addFunction ( "obtenerAsignaturasSolicitables" );
 $server->addFunction ( "obtenerPrecontratos" );
 

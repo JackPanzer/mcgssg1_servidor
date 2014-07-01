@@ -196,6 +196,12 @@ class ComplexPrecontrato {
 	public $nomDestino; //string
 	public $idDestino; //int
 	
+	public $telefono; //string
+	public $titulacion; //string
+	public $nvlAlumno; //string
+	
+	public $asignaturas; //ArrayAsignaturasExt
+	
 	public function ComplexPrecontrato(){
 		$errno = 0;
 	}
