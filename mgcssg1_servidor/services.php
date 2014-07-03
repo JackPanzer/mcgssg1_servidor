@@ -737,7 +737,7 @@ function obtenerPrecontratos($idAlumno){
 		$bdactual = mysql_select_db ( DB_NAME, $conexion );
 		// Primera parte
 		// Armando la consulta SQL
-		$query = "SELECT u.nombre AS nomAlumno, s.idAl AS idAlalumno," .
+		$query = "SELECT u.nombre AS nomAlumno, s.idAl AS idAlumno," .
 				 " d.nombre AS nomDestino, s.idDest AS idDestino," . 
 				 " tit.nombre AS titulacion" . 
 				 " FROM ((Usuario u INNER JOIN Solicitud s ON u.id = s.idAl)" . 
@@ -767,6 +767,7 @@ function obtenerPrecontratos($idAlumno){
 				}
 		
 				$retorno->precontratos = $tempPrecontrato;
+				logToFile("obtenerPrecontratos.json", json_encode($retorno));
 			} else { // La consulta no devolvió ningún resultado
 				$retorno->errno = 1;
 			}
@@ -779,6 +780,44 @@ function obtenerPrecontratos($idAlumno){
 		$retorno->errno = - 1;
 	}
 	
+	return $retorno;
+}
+
+/**
+ * Crea una instancia de alumno en la BBDD
+ * 
+ * @param $nombre del alumno
+ * @param $apellidos del alumno
+ * @param $nif del alumno
+ * @param $direccion del alumno
+ * @param $poblacion del alumno
+ * @param $nick del alumno
+ * @param $passwd del alumno
+ * @param $titulacion elegida por del alumno
+ */
+function crearAlumno($nombre, $apellidos, $nif, $direccion, $poblacion, $nick, $passwd, $titulacion){
+	$retorno = new GenericResult ();
+	$conexion = mysql_connect ( DB_SERVER, DB_USER, DB_PASS );
+	if ($conexion) {
+		$bdactual = mysql_select_db ( DB_NAME, $conexion );
+
+		$rol=1;
+
+		$query = sprintf ( "INSERT INTO Usuario (nombre, apellidos, nif, rol, direccion, poblacion, nick, passwd, titulacion)" . " VALUES('%s','%s','%s',%d,'%s','%s','%s', '%s', %d);", mysql_escape_string ($nombre), mysql_escape_string($apellidos), mysql_escape_string($nif), $rol, mysql_escape_string($direccion), mysql_escape_string($poblacion), mysql_escape_string($nick), mysql_escape_string($passwd), $titulacion );
+		logToFile("crearAlumno.txt", $query);
+
+		$resultadoquery = mysql_query ( $query, $conexion );
+		if ($resultadoquery) {
+			$retorno->errno = 0;
+		} else { /* Sentencia SQL incorrecta */
+			$retorno->errno = - 2;
+		}
+
+		mysql_close ( $conexion );
+	} else { /* Fallo en la conexion */
+		$retorno->errno = - 1;
+	}
+
 	return $retorno;
 }
 
@@ -806,6 +845,7 @@ $server->addFunction ( "obtenerDestinos" );
 $server->addFunction ( "agregarAsignaturaSolicitud" );
 $server->addFunction ( "obtenerAsignaturasSolicitables" );
 $server->addFunction ( "obtenerPrecontratos" );
+$server->addFunction ( "crearAlumno" );
 
 $server->handle ();
 

@@ -173,7 +173,7 @@
   	<part name="poblacion" type="xsd:string" />
   	<part name="nick" type="xsd:string" />
   	<part name="passwd" type="xsd:string" />
-  	<part name="titulacion" type="xsd:string" />
+  	<part name="titulacion" type="xsd:int" />
   </message>
   
   <message name="crearAlumnoSalida">
