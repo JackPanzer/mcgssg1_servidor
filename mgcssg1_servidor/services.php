@@ -740,8 +740,10 @@ function obtenerPrecontratos($idAlumno){
 		$query = "SELECT u.nombre AS nomAlumno, s.idAl AS idAlalumno," .
 				 " d.nombre AS nomDestino, s.idDest AS idDestino," . 
 				 " tit.nombre AS titulacion" . 
-				 " FROM (Usuario u INNER JOIN Solicitud s ON u.id = s.idAl)" . 
-			 	 " INNER JOIN Destino d ON d.id = s.idDest WHERE s.aceptado=false;";
+				 " FROM ((Usuario u INNER JOIN Solicitud s ON u.id = s.idAl)" . 
+			 	 " INNER JOIN Destino d ON d.id = s.idDest)" .
+			 	 " INNER JOIN Titulacion tit ON tit.id = u.titulacion" .
+				 " WHERE s.aceptado=false;";
 		// Fin de consulta SQL
 		logToFile("obtenerPrecontratos.txt", $query);
 		
