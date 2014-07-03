@@ -117,10 +117,7 @@
     			<xsd:element name="idAlumno" type="xsd:int" />
     			<xsd:element name="nomDestino" type="xsd:string" />
     			<xsd:element name="idDestino" type="xsd:int" />
-    			<xsd:element name="tlfAlumno" type="xsd:string" />
     			<xsd:element name="titulacionAlumno" type="xsd:string" />
-    			<xsd:element name="nvlAlumno" type="xsd:string" />
-    			<xsd:element name="asignaturas" type="tns:ArrayAsignaturasExt" />
     		</xsd:sequence>
     	</xsd:complexType>
     	
@@ -376,7 +373,7 @@
   	<operation name="obtenerAsignaturasSolicitables">
   		<input message="tns:ObtenerAsignaturasSolicitablesEntrada" />
   		<output message="tns:ObtenerAsignaturasSolicitablesOutput" />
-  	</operation>
+  	</operation>
   </portType>
  
   <binding name="ErasmusWSDLBinding" type="tns:ErasmusWSDLPort">

@@ -737,7 +737,7 @@ function obtenerPrecontratos($idAlumno){
 		$bdactual = mysql_select_db ( DB_NAME, $conexion );
 		// Primera parte
 		// Armando la consulta SQL
-		$query = "SELECT u.nombre AS nomAlumno, s.idAl AS idAlalumno, u.telefono AS telefono," .
+		$query = "SELECT u.nombre AS nomAlumno, s.idAl AS idAlalumno," .
 				 " d.nombre AS nomDestino, s.idDest AS idDestino," . 
 				 " tit.nombre AS titulacion" . 
 				 " FROM (Usuario u INNER JOIN Solicitud s ON u.id = s.idAl)" . 
@@ -757,11 +757,8 @@ function obtenerPrecontratos($idAlumno){
 					$solicitudActual->nomAlumno = $fila ['nomAlumno'];
 					$solicitudActual->idAlumno = $fila ['idAlumno'];
 					$solicitudActual->nomDestino = $fila ['nomDestino'];
-					$solicitudActual->idDest = $fila ['idDestino'];
-
-					$solicitudActual->telefono = $fila ['telefono'];
-					$solicitudActual->nvlAlumno = $fila ['nvlAlumno'];
-					$solicitudActual->titulacion = $fila ['titulacion'];
+					$solicitudActual->idDestino = $fila ['idDestino'];
+					$solicitudActual->titulacionAlumno = $fila ['titulacion'];
 					
 						
 					array_push ( $tempPrecontrato, $solicitudActual );
