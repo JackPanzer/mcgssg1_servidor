@@ -165,6 +165,23 @@
   	<part name="nvlRequerido" type="xsd:int" />
   </message>
   
+  <message name="crearAlumnoEntrada">
+  	<part name="nombre" type="xsd:string" />
+  	<part name="apellidos" type="xsd:string" />
+  	<part name="nif" type="xsd:string" />
+  	<part name="direccion" type="xsd:string" />
+  	<part name="poblacion" type="xsd:string" />
+  	<part name="nick" type="xsd:string" />
+  	<part name="passwd" type="xsd:string" />
+  	<part name="titulacion" type="xsd:string" />
+  </message>
+  
+  <message name="crearAlumnoSalida">
+  	<part name="retorno" type="tns:GenericResult" />
+  </message>
+  
+  
+  
   <message name="CrearDestinoSalida">
   	<part name="resultado" type="tns:GenericResult" />
   </message>
@@ -312,6 +329,11 @@
   		<output message="tns:EditarDestinoSalida" />
   	</operation>
   	
+  	<operation name="crearAlumno">
+	 	<input message="tns:crearAlumnoEntrada" />
+	 	<output message="tns:crearAlumnoSalida" />
+  	</operation>
+  	
   	<operation name="borrarDestino">
   		<input message="tns:BorrarDestinoEntrada" />
   		<output message="tns:BorrarDestinoSalida" />
@@ -391,6 +413,17 @@
     </operation>
     <operation name="crearSolicitud">
         <soap:operation soapAction="urn:ErasmusWSDL#crearSolicitud" />
+        <input>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    <operation name="crearAlumno">
+        <soap:operation soapAction="urn:ErasmusWSDL#crearAlumno" />
         <input>
           <soap:body use="literal" namespace="urn:ErasmusWSDL"
                      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
