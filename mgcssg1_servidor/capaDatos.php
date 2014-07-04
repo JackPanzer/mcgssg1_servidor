@@ -100,12 +100,13 @@ class ArraySolicitudes{
 class ComplexAsignatura{
 	public $errno; //int
 	
+	public $idAsig;
 	public $nombre; //string
 	public $titulacion; //string
 	public $creditos; //int
 	public $coordinador; //int
 	
-	public $asignaturas; //ArrayAsignaturaExt
+	//public $asignaturas; //ArrayAsignaturaExt
 	
 	public function ComplexAsignatura(){
 		$errno = 0;

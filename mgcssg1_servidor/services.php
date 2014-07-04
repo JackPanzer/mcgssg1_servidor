@@ -830,6 +830,51 @@ function logToFile($file, $text){
 	fclose($fichero);
 }
 
+function obtenerAsignaturasParaMatricular($idAlumno){
+	$retorno = new ArrayAsignaturas();
+	$conexion = mysql_connect ( DB_SERVER, DB_USER, DB_PASS );
+	if ($conexion) {
+		$bdactual = mysql_select_db ( DB_NAME, $conexion );
+	
+		$query = sprintf ( "select id, nombre, titulacion, creditos, coordinador
+							from asignatura
+							where id not in (select id from matricula where id=%d and nota >= 5)
+									and titulacion in (select titulacion from usuario where id=%d);",
+							$idAlumno, $idAlumno);
+		logToFile("obtenerAsignaturasParaMatricular.txt", $query);
+		$resultadoquery = mysql_query ( $query, $conexion );
+		if ($resultadoquery) {
+			$retorno->errno = 0;
+			if (mysql_num_rows ( $resultadoquery ) != 0) {
+				$temparray = array ();
+				while ( $fila = mysql_fetch_assoc ( $resultadoquery ) ) {
+					$asignaturaActual = new ComplexAsignatura();
+						
+					$asignaturaActual->id = $fila ['id'];
+					$asignaturaActual->nombre = $fila ['nombre'];
+					$asignaturaActual->titulacion = $fila ['titulacion'];
+					$asignaturaActual->creditos = $fila ['creditos'];
+					$asignaturaActual->coordinador = $fila ['coordinador'];
+	
+					array_push ( $temparray, $asignaturaActual );
+				}
+				$retorno->asignaturas = $temparray;
+			} else { // La consulta no devolvió ningún resultado
+				$retorno->errno = 1;
+			}
+		} else { /* Sentencia SQL incorrecta */
+			$retorno->errno = - 2;
+		}
+	
+		mysql_close ( $conexion );
+	} else { /* Fallo en la conexion */
+		$retorno->errno = - 1;
+	}
+	
+	return $retorno;
+}
+
+$server->addFunction ( "obtenerAsignaturasParaMatricular" );
 $server->addFunction ( "consultarDestinos" );
 $server->addFunction ( "crearSolicitud" );
 $server->addFunction ( "borrarSolicitud" );
