@@ -210,7 +210,6 @@ class ComplexPrecontrato {
  * Representa una lista de precontratos
  * 
  */
-
 class ArrayPrecontratos {
 	public $errno; //int
 	
