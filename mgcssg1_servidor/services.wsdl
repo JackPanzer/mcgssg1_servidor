@@ -233,7 +233,7 @@
   </message>
   
   <message name="obtenerPrecontratosSalida">
-  	<part name="resultado" type="tns:ArraySolicitudes" />
+  	<part name="resultado" type="tns:ArrayPrecontrato" />
   </message>
   
   
