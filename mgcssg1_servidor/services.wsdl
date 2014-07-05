@@ -62,6 +62,7 @@
     	<xsd:complexType name="ComplexAsignatura">
     		<xsd:sequence>
     			<xsd:element name="errno" type="xsd:int" />
+    			<xsd:element name="id" type="xsd:int" />
     			<xsd:element name="nombre" type="xsd:string" />
     			<xsd:element name="titulacion" type="xsd:string" />
     			<xsd:element name="creditos" type="xsd:int" />
@@ -239,6 +240,15 @@
   
   
   
+  <message name="obtenerAsignaturasParaMatricularEntrada">
+  	<part name="idAlumno" type="xsd:int" />
+  </message>
+  
+  <message name="obtenerAsignaturasParaMatricularSalida">
+  	<part name="resultado" type="tns:ArrayAsignaturas" />
+  </message>
+  
+  
   
   <message name="ConsultarAsignaturasMatriculadasEntrada">
   	<part name="idAlumno" type="xsd:int" />
@@ -356,6 +366,12 @@
   		<output message="tns:obtenerPrecontratosSalida" />
   	</operation>
   	
+  	<operation name="obtenerAsignaturasParaMatricular">
+  		<input message="tns:obtenerAsignaturasParaMatricularEntrada"/>
+  		<output message="tns:obtenerAsignaturasParaMatricularSalida" />
+  		
+  	</operation>
+  	
   	
   	
   	
@@ -409,6 +425,19 @@
                      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         </output>
     </operation>
+    
+    <operation name="obtenerAsignaturasParaMatricular">
+        <soap:operation soapAction="urn:ErasmusWSDL#obtenerAsignaturasParaMatricular" />
+        <input>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    
     <operation name="crearSolicitud">
         <soap:operation soapAction="urn:ErasmusWSDL#crearSolicitud" />
         <input>
