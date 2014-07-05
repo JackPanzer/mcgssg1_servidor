@@ -377,13 +377,18 @@ function consultarSolicitudes($idUsuario, $idDestino) {
  *        	del Usuario sobre el que hacer la petición
  */
 function consultarAsignaturasMatriculadas($idAlumno) {
-	$retorno = new ArrayAsignaturas ();
+	$retorno = new ArrayAsignaturas();
 	$conexion = mysql_connect ( DB_SERVER, DB_USER, DB_PASS );
 	if ($conexion) {
 		$bdactual = mysql_select_db ( DB_NAME, $conexion );
 		
 		// Armando la consulta SQL
-		$query = sprintf ( "SELECT asig.nombre AS nombre, t.nombre AS titulacion, asig.creditos AS creditos, c.nombre AS coordinador" . " FROM (((Asignatura asig INNER JOIN Usuario c ON c.id = asig.coordinador)" . " INNER JOIN Titulacion t ON t.id = asig.titulacion)" . " INNER JOIN Matricula m ON m.asignatura = asig.id)" . " INNER JOIN Usuario al ON al.id = m.id" . " WHERE al.id = %d;", $idAlumno );
+		$query = sprintf ( "SELECT asig.nombre AS nombre, t.nombre AS titulacion, asig.creditos AS creditos, c.nombre AS coordinador" . 
+							" FROM (((Asignatura asig INNER JOIN Usuario c ON c.id = asig.coordinador)" . 
+							" INNER JOIN Titulacion t ON t.id = asig.titulacion)" . 
+							" INNER JOIN Matricula m ON m.asignatura = asig.id)" . 
+							" INNER JOIN Usuario al ON al.id = m.id" . 
+							" WHERE al.id = %d and (m.nota<5 or m.nota is null);", $idAlumno );
 		// Fin de consulta SQL
 		logToFile("consultarAsignaturasMatriculadas.txt", $query);
 		$resultadoquery = mysql_query ( $query, $conexion );
@@ -394,6 +399,7 @@ function consultarAsignaturasMatriculadas($idAlumno) {
 				while ( $fila = mysql_fetch_assoc ( $resultadoquery ) ) {
 					$asignaturaActual = new ComplexAsignatura ();
 					
+					$asignaturaActual->id = $fila ['id'];
 					$asignaturaActual->nombre = $fila ['nombre'];
 					$asignaturaActual->titulacion = $fila ['titulacion'];
 					$asignaturaActual->creditos = $fila ['creditos'];
