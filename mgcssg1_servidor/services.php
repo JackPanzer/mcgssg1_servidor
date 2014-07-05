@@ -886,10 +886,12 @@ function obtenerAsignaturasParaMatricular($idAlumno){
 	if ($conexion) {
 		$bdactual = mysql_select_db ( DB_NAME, $conexion );
 	
-		$query = sprintf ( "select id, nombre, titulacion, creditos, coordinador
-							from asignatura
-							where id not in (select asignatura from matricula where id=%d and nota >= 5)
-									and titulacion in (select titulacion from usuario where id=%d);",
+		$query = sprintf ( "SELECT asig.id AS id, asig.nombre AS nombre, tit.nombre AS titulacion, asig.creditos AS creditos,
+						 coord.nombre AS coordinador_nombre, coord.apellidos AS coordinador_apellidos
+						FROM (asignatura asig INNER JOIN titulacion tit ON asig.titulacion = tit.id)
+						INNER JOIN Usuario coord ON coord.id = asig.coordinador
+						WHERE asig.id NOT IN (SELECT asignatura FROM matricula WHERE id=%d AND nota >= 5)
+						AND asig.titulacion IN (SELECT titulacion FROM usuario WHERE id=%d);",
 							$idAlumno, $idAlumno);
 		logToFile("obtenerAsignaturasParaMatricular.txt", $query);
 		$resultadoquery = mysql_query ( $query, $conexion );
@@ -904,9 +906,13 @@ function obtenerAsignaturasParaMatricular($idAlumno){
 					$asignaturaActual->nombre = $fila ['nombre'];
 					$asignaturaActual->titulacion = $fila ['titulacion'];
 					$asignaturaActual->creditos = $fila ['creditos'];
-					$asignaturaActual->coordinador = $fila ['coordinador'];
+					
+					$nomCoordinador = $fila ['coordinador_nombre'] . " " . $fila ['coordinador_apellidos'];
+					$asignaturaActual->coordinador = $nomCoordinador;
 	
 					array_push ( $temparray, $asignaturaActual );
+					
+					logToFile("asignaturaLocal.json", json_encode($asignaturaActual) );
 				}
 				$retorno->asignaturas = $temparray;
 			} else { // La consulta no devolvió ningún resultado
