@@ -148,6 +148,18 @@
   	<part name="retorno" type="tns:GenericResult" />
   </message>
   
+  
+  <message name="matricularAsignaturaEntrada">
+  	<part name="idAlumno" type="xsd:int" />
+  	<part name="idAsignatura" type="xsd:int" />
+  	<part name="quiereconval" type="xsd:int" />
+  </message>
+  
+  <message name="matricularAsignaturaSalida">
+  	<part name="retorno" type="tns:GenericResult" />
+  </message>
+  
+  
   <message name="BorrarSolicitudEntrada">
   	<part name="idAlumno" type="xsd:int" />
   	<part name="idDestino" type="xsd:int" />
@@ -322,6 +334,11 @@
   		<output message="tns:CrearSolicitudSalida" />
   	</operation>
   	
+  	<operation name="matricularAsignatura">
+  		<input message="tns:matricularAsignaturaEntrada" />
+  		<output message="tns:matricularAsignaturaSalida" />
+  	</operation>
+  	
   	<operation name="borrarSolicitud">
   		<input message="tns:BorrarSolicitudEntrada" />
   		<output message="tns:BorrarSolicitudSalida" />
@@ -428,6 +445,19 @@
     
     <operation name="obtenerAsignaturasParaMatricular">
         <soap:operation soapAction="urn:ErasmusWSDL#obtenerAsignaturasParaMatricular" />
+        <input>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+    
+    
+    <operation name="matricularAsignatura">
+        <soap:operation soapAction="urn:ErasmusWSDL#matricularAsignatura" />
         <input>
           <soap:body use="literal" namespace="urn:ErasmusWSDL"
                      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />

@@ -827,6 +827,11 @@ function crearAlumno($nombre, $apellidos, $nif, $direccion, $poblacion, $nick, $
 	return $retorno;
 }
 
+/**
+ * 
+ * @param $file
+ * @param $text
+ */
 function logToFile($file, $text){
 	$fichero = fopen('logs/'.$file, "a");
 	$fecha = date('d/m/Y H:i:s');
@@ -836,6 +841,45 @@ function logToFile($file, $text){
 	fclose($fichero);
 }
 
+/**
+ * 
+ * @param $idAlumno alumno en cuestion
+ * @param $idAsignatura asignatura a matricular
+ * @param $quiereConval convalidar asignatura Si/No
+ * @return GenericResult
+ */
+function matricularAsignatura($idAlumno, $idAsignatura, $quiereConval){
+	$retorno = new GenericResult ();
+	$conexion = mysql_connect ( DB_SERVER, DB_USER, DB_PASS );
+	if ($conexion) {
+		$bdactual = mysql_select_db ( DB_NAME, $conexion );
+		$fechaactual = date ( "Y/m/d" );
+	
+		$nota=0; //Empiezas con un 0
+		$query = sprintf ( "INSERT INTO matricula (id, asignatura, fecha, nota, quiereconval) 
+							VALUES(%d,%d,'%s',%d,%d);", $idAlumno, $idAsignatura, mysql_escape_string ( $fechaactual ), $nota, $quiereConval);
+	
+		logToFile("matricularAsignatura.txt", $query);
+		$resultadoquery = mysql_query ( $query, $conexion );
+		if ($resultadoquery) {
+			$retorno->errno = 0;
+		} else { /* Sentencia SQL incorrecta */
+			$retorno->errno = - 2;
+		}
+	
+		mysql_close ( $conexion );
+	} else { /* Fallo en la conexion */
+		$retorno->errno = - 1;
+	}
+	
+	return $retorno;
+}
+
+/**
+ * 
+ * @param $idAlumno Alumno interesado
+ * @return ArrayAsignaturas Lista de asignaturas que el alumno puede matricular
+ */
 function obtenerAsignaturasParaMatricular($idAlumno){
 	$retorno = new ArrayAsignaturas();
 	$conexion = mysql_connect ( DB_SERVER, DB_USER, DB_PASS );
@@ -880,6 +924,7 @@ function obtenerAsignaturasParaMatricular($idAlumno){
 	return $retorno;
 }
 
+$server->addFunction ( "matricularAsignatura" );
 $server->addFunction ( "obtenerAsignaturasParaMatricular" );
 $server->addFunction ( "consultarDestinos" );
 $server->addFunction ( "crearSolicitud" );
