@@ -838,7 +838,7 @@ function obtenerAsignaturasParaMatricular($idAlumno){
 	
 		$query = sprintf ( "select id, nombre, titulacion, creditos, coordinador
 							from asignatura
-							where id not in (select id from matricula where id=%d and nota >= 5)
+							where id not in (select asignatura from matricula where id=%d and nota >= 5)
 									and titulacion in (select titulacion from usuario where id=%d);",
 							$idAlumno, $idAlumno);
 		logToFile("obtenerAsignaturasParaMatricular.txt", $query);
