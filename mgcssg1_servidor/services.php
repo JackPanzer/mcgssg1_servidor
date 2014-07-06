@@ -688,8 +688,10 @@ function obtenerAsignaturasSolicitables($idAlumno, $idDestino){
 							" INNER JOIN Convalidacion conv ON asig.id = conv.asignatura)" .
 							" INNER JOIN AsignaturaExt aex ON aex.id = conv.asignaturaext)" .
 							" INNER JOIN Destino d ON aex.centro = d.id" .
-							" WHERE usu.id = %d AND aex.centro = %d;",
-				$idAlumno, $idDestino);
+							" WHERE usu.id = %d AND aex.centro = %d AND aex.id  NOT IN (SELECT asignaturaext 
+																					 	FROM AsigPrecontrato prec 
+																					 	WHERE aex.centro = prec.destino AND usu.id = prec.usuario);",
+							$idAlumno, $idDestino);
 		logToFile("obtenerAsignaturasSolicitables.txt", $query);
 		$resultadoquery = mysql_query ( $query, $conexion );
 		if ($resultadoquery) {
