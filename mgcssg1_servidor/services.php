@@ -929,7 +929,7 @@ function obtenerAsignaturasParaMatricular($idAlumno){
 						 coord.nombre AS coordinador_nombre, coord.apellidos AS coordinador_apellidos
 						FROM (asignatura asig INNER JOIN titulacion tit ON asig.titulacion = tit.id)
 						INNER JOIN Usuario coord ON coord.id = asig.coordinador
-						WHERE asig.id NOT IN (SELECT asignatura FROM matricula WHERE id=%d AND nota >= 5)
+						WHERE asig.id NOT IN (SELECT asignatura FROM matricula WHERE id=%d)
 						AND asig.titulacion IN (SELECT titulacion FROM usuario WHERE id=%d);",
 							$idAlumno, $idAlumno);
 		logToFile("obtenerAsignaturasParaMatricular.txt", $query);
