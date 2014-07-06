@@ -193,6 +193,23 @@
   	<part name="retorno" type="tns:GenericResult" />
   </message>
   
+  
+  <message name="crearCoordinadorEntrada">
+  	<part name="nombre" type="xsd:string" />
+  	<part name="apellidos" type="xsd:string" />
+  	<part name="nif" type="xsd:string" />
+  	<part name="direccion" type="xsd:string" />
+  	<part name="poblacion" type="xsd:string" />
+  	<part name="nick" type="xsd:string" />
+  	<part name="passwd" type="xsd:string" />
+  </message>
+  
+  <message name="crearCoordinadorSalida">
+  	<part name="retorno" type="tns:GenericResult" />
+  </message>
+  
+  
+  
   <message name="CrearDestinoSalida">
   	<part name="resultado" type="tns:GenericResult" />
   </message>
@@ -359,6 +376,11 @@
 	 	<output message="tns:crearAlumnoSalida" />
   	</operation>
   	
+  	<operation name="crearCoordinador">
+  		<input message="tns:crearCoordinadorEntrada"/>
+  		<output message="tns:crearCoordinadorSalida"/>
+  	</operation>
+  	
   	<operation name="borrarDestino">
   		<input message="tns:BorrarDestinoEntrada" />
   		<output message="tns:BorrarDestinoSalida" />
@@ -490,6 +512,18 @@
                      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         </output>
     </operation>
+    
+    <operation name="crearCoordinador">
+        <soap:operation soapAction="urn:ErasmusWSDL#crearCoordinador" />
+        <input>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
     <operation name="borrarSolicitud">
         <soap:operation soapAction="urn:ErasmusWSDL#borrarSolicitud" />
         <input>
@@ -559,9 +593,7 @@
         </output>
     </operation>
     
-    
-    
-    
+       
     
     
     <operation name="obtenerPrecontratos">
@@ -575,9 +607,6 @@
                      encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
         </output>
     </operation>
-    
-    
-    
     
     
     
