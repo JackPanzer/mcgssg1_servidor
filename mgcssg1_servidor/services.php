@@ -21,7 +21,7 @@ function consultarDestinos($idAlumno) {
 	if ($conexion) {
 		$esquema = mysql_select_db ( DB_NAME, $conexion );
 		if ($esquema) {
-			$query = sprintf ( "SELECT d.id AS id, d.nombre AS nombre, p.nombre AS pais, p.id AS idpais,".
+			$query = sprintf ( "SELECT DISTINCT d.id AS id, d.nombre AS nombre, p.nombre AS pais, p.id AS idpais,".
 								" i.nombre AS idioma, i.id AS id_idioma, d.disponible," . 
 								" d.numplazas AS numplazas, n.nombre AS nvlrequerido, n.id AS idnvlrequerido" . 
 								" FROM (((((((Usuario u INNER JOIN Matricula m on m.id = u.id)" .
@@ -32,7 +32,7 @@ function consultarDestinos($idAlumno) {
 								" INNER JOIN Pais p ON d.pais = p.id)" . 
 								" INNER JOIN Idioma i ON d.idioma = i.id)" . 
 								" INNER JOIN Nivel n ON d.nvlrequerido = n.id" . 
-								" WHERE u.id = %d AND d.numplazas > 0 AND d.disponible = true;", $idAlumno );
+								" WHERE u.id = %d AND d.numplazas > 0 AND d.disponible = true AND d.id  NOT IN (SELECT DISTINCT idDest FROM Solicitud WHERE idAl = u.id) ;", $idAlumno );
 			logToFile("consultarDestinos.txt", $query);
 			$resultadoQuery = mysql_query ( $query, $conexion );
 			if ($resultadoQuery) {
