@@ -266,6 +266,13 @@
   	<part name="resultado" type="tns:ArrayPrecontrato" />
   </message>
   
+  <message name="obtenerPrecontratosDeAlumnoEntrada">
+  	<part name="idAlumno" type="xsd:int" />
+  </message>
+  
+  <message name="obtenerPrecontratosDeAlumnoSalida">
+  	<part name="resultado" type="tns:ArrayPrecontrato" />
+  </message>
   
   
   
@@ -403,6 +410,11 @@
   	<operation name="obtenerPrecontratos">
   		<input message="tns:obtenerPrecontratosEntrada" />
   		<output message="tns:obtenerPrecontratosSalida" />
+  	</operation>
+  	
+  	<operation name="obtenerPrecontratosDeAlumno">
+  		<input message="tns:obtenerPrecontratosDeAlumnoEntrada" />
+  		<output message="tns:obtenerPrecontratosDeAlumnoSalida" />
   	</operation>
   	
   	<operation name="obtenerAsignaturasParaMatricular">
@@ -608,9 +620,18 @@
         </output>
     </operation>
     
-    
-    
-    
+    <operation name="obtenerPrecontratosDeAlumno">
+        <soap:operation soapAction="urn:ErasmusWSDL#obtenerPrecontratosDeAlumno" />
+        <input>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </input>
+        <output>
+          <soap:body use="literal" namespace="urn:ErasmusWSDL"
+                     encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+        </output>
+    </operation>
+        
     <operation name="consultarAsignaturasMatriculadas">
         <soap:operation soapAction="urn:ErasmusWSDL#consultarAsignaturasMatriculadas" />
         <input>

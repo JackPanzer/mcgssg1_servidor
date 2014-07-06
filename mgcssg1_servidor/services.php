@@ -791,6 +791,63 @@ function obtenerPrecontratos($idAlumno){
 	return $retorno;
 }
 
+
+function obtenerPrecontratosDeAlumno($idAlumno){
+	/**
+	 * Esta función va en dos partes: la primera es obtener todas las
+	 * solicitudes a precontrato, la segunda es armar todas las asignaturas
+	 * a enviar
+	 */
+
+	$retorno = new ArrayPrecontratos ();
+	$conexion = mysql_connect ( DB_SERVER, DB_USER, DB_PASS );
+	if ($conexion) {
+		$bdactual = mysql_select_db ( DB_NAME, $conexion );
+		// Primera parte
+		// Armando la consulta SQL
+		$query = sprintf("SELECT u.nombre AS nomAlumno, s.idAl AS idAlumno, d.nombre AS nomDestino, s.idDest AS idDestino,  tit.nombre AS titulacion
+				  FROM ((Usuario u INNER JOIN Solicitud s ON u.id = s.idAl)
+				  INNER JOIN Destino d ON d.id = s.idDest) INNER JOIN Titulacion tit ON tit.id = u.titulacion
+				  WHERE s.aceptado=false and u.id=%d;", $idAlumno);
+		// Fin de consulta SQL
+		logToFile("obtenerPrecontratosDeAlumno.txt", $query);
+
+		$resultadoquery = mysql_query ( $query, $conexion );
+
+		if ($resultadoquery) {
+			$retorno->errno = 0;
+			if (mysql_num_rows ( $resultadoquery ) != 0) {
+				$tempPrecontrato = array();
+				while ( $fila = mysql_fetch_assoc ( $resultadoquery ) ) {
+					$solicitudActual = new ComplexPrecontrato ();
+						
+					$solicitudActual->nomAlumno = $fila ['nomAlumno'];
+					$solicitudActual->idAlumno = $fila ['idAlumno'];
+					$solicitudActual->nomDestino = $fila ['nomDestino'];
+					$solicitudActual->idDestino = $fila ['idDestino'];
+					$solicitudActual->titulacionAlumno = $fila ['titulacion'];
+						
+
+					array_push ( $tempPrecontrato, $solicitudActual );
+				}
+
+				$retorno->precontratos = $tempPrecontrato;
+				logToFile("obtenerPrecontratos.json", json_encode($retorno));
+			} else { // La consulta no devolvió ningún resultado
+				$retorno->errno = 1;
+			}
+		} else { /* Sentencia SQL incorrecta */
+			$retorno->errno = - 2;
+		}
+
+		mysql_close ( $conexion );
+	}else { /* Fallo en la conexion */
+		$retorno->errno = - 1;
+	}
+
+	return $retorno;
+}
+
 /**
  * Crea una instancia de alumno en la BBDD
  * 
@@ -988,6 +1045,7 @@ $server->addFunction ( "obtenerDestinos" );
 $server->addFunction ( "agregarAsignaturaSolicitud" );
 $server->addFunction ( "obtenerAsignaturasSolicitables" );
 $server->addFunction ( "obtenerPrecontratos" );
+$server->addFunction ( "obtenerPrecontratosDeAlumno" );
 $server->addFunction ( "crearAlumno" );
 $server->addFunction ( "crearCoordinador" );
 
