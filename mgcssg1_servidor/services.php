@@ -91,7 +91,7 @@ function crearSolicitud($idAlumno, $idDestino) {
 	$conexion = mysql_connect ( DB_SERVER, DB_USER, DB_PASS );
 	if ($conexion) {
 		$bdactual = mysql_select_db ( DB_NAME, $conexion );
-		$fechaactual = date ( "d/m/Y" );
+		$fechaactual = date ( "Y/m/d" );
 		
 		$query = sprintf ( "INSERT INTO Solicitud VALUES(%d,%d,'%s', false);", $idAlumno, $idDestino, mysql_escape_string ( $fechaactual ) );
 		
